@@ -1,2 +1,4 @@
-node_modules
+# Do not edit
 .env
+node_modules
+notes.txt
