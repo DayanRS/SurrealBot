@@ -21,8 +21,7 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
-		const args = interaction.options.data;
-		
+		//const args = interaction.options.data;
 		const userToBan = interaction.options.getUser("user", true);
 		const banReason = interaction.options.getString("reason", true);
 		

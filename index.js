@@ -1,10 +1,10 @@
-const fs = require('node:fs');
-const { Client, Collection, Intents } = require('discord.js');
+const fs = require("node:fs");
+const { Client, Collection, Intents } = require("discord.js");
 const { DISCORD_TOKEN } = require("dotenv").config().parsed;
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-//load commands
+//initialise commands
 client.commands = new Collection();
 const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".js"));	//array of js file names
 
@@ -13,7 +13,7 @@ for(const fileName of commandFiles) {
 	client.commands.set(command.data.name, command);	//set key/value pair in collection
 }
 
-//load event handlers
+//initialise event handlers
 const eventFiles = fs.readdirSync("./events").filter((file) => file.endsWith(".js"));
 
 for(const fileName of eventFiles) {
