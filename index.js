@@ -6,36 +6,24 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 //load commands
 client.commands = new Collection();
-const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));	//array of js file names
+const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".js"));	//array of js file names
 
 for(const fileName of commandFiles) {
 	const command = require(`./commands/${fileName}`);	//import module
 	client.commands.set(command.data.name, command);	//set key/value pair in collection
 }
 
-client.once("ready", () => {
-	console.log("Hi");
-});
+//load event handlers
+const eventFiles = fs.readdirSync("./events").filter((file) => file.endsWith(".js"));
 
-
-client.on("interactionCreate", async (interaction) => {
-	if(!interaction.isCommand()) return;
+for(const fileName of eventFiles) {
+	const event = require(`./events/${fileName}`);
 	
-	const command = client.commands.get(interaction.commandName);
-	
-	if(!command) return;
-	
-	try {
-		await command.execute(interaction);
-	} catch(err) {
-		console.error(err);
-		
-		await interaction.reply({
-			content: "Error executing command",
-			ephemeral: true		//only the user can see this reply
-		});
+	if(event.once) {
+		client.once(event.name, (...args) => event.execute(...args));	//pass arguments back to command
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
 	}
-});
-
+}
 
 client.login(DISCORD_TOKEN);
