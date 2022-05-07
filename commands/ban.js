@@ -1,4 +1,4 @@
-const { Constants, CommandInteraction } = require("discord.js");
+const { Constants } = require("discord.js");
 
 module.exports = {
 	data: {
@@ -26,10 +26,12 @@ module.exports = {
 		const userToBan = interaction.options.getUser("user", true);
 		const banReason = interaction.options.getString("reason", true);
 		
+		//TODO: The actual ban logic
+		
 		const banString = `
 			**Banned user:** <@${userToBan.id}> (${userToBan.id})
 			**Reason:** ${banReason}
-			**Duration:** N/A
+			**Duration:** Permanent
 			**Staff member:** ${interaction.member.user.username}
 		`.replaceAll("\t","");
 		
