@@ -6,7 +6,7 @@ module.exports = {
 		description: "Ban user from the server",
 		options: [
 			{
-				name: "user",
+				name: "username",
 				type: Constants.ApplicationCommandOptionTypes.USER,
 				description: "The user to ban",
 				required: true
@@ -22,10 +22,15 @@ module.exports = {
 	
 	async execute(interaction) {
 		//const args = interaction.options.data;
-		const userToBan = interaction.options.getUser("user", true);
+		const userToBan = interaction.options.getUser("username", true);
 		const banReason = interaction.options.getString("reason", true);
 		
-		//TODO: The actual ban logic
+		//TODO: Implement ban logic
+		//-Check permissions
+		//-User validation (in server, not self, not same/higher role, etc)
+		//-Send message to user
+		//-Send message in log channel
+		//-Execute the ban
 		
 		const banString = `
 			**Banned user:** <@${userToBan.id}> (${userToBan.id})

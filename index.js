@@ -9,7 +9,7 @@ client.commands = new Collection();
 const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".js"));	//array of js file names
 
 for(const fileName of commandFiles) {
-	const command = require(`./commands/${fileName}`);	//import module
+	const command = require(`./commands/${fileName}`);	//import command module
 	client.commands.set(command.data.name, command);	//set key/value pair in collection
 }
 
