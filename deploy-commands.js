@@ -1,5 +1,4 @@
 const fs = require('node:fs');
-const { SlashCommandBuilder } = require("@discordjs/builders");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
 const { DEV_GUILD_ID, BOT_ID, DISCORD_TOKEN } = require("dotenv").config().parsed;
@@ -9,12 +8,23 @@ const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith("
 
 for(const fileName of commandFiles) {
 	const command = require(`./commands/${fileName}`);	//import module
-	commands.push(command.data.toJSON());
+	commands.push(command.data);
 }
 
 const rest = new REST({ version: "9" }).setToken(DISCORD_TOKEN);
 
-rest.put(Routes.applicationGuildCommands(BOT_ID, DEV_GUILD_ID), { body: commands })
-	.then(() => console.log("Successfully loaded commands."))
-	.catch(console.error);
+(async () => {
+	try {
+		console.log("Updating commands...");
+		
+		await rest.put(Routes.applicationGuildCommands(BOT_ID, DEV_GUILD_ID), { body: commands });
+		
+		//await rest.put(Routes.applicationCommands(BOT_ID), { body: commands });	//global commands
+		
+		console.log("Successfully updated commands!");
+	} catch(err) {
+		console.error(err);
+	}
+})();
+
 
