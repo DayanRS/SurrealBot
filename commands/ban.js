@@ -2,7 +2,7 @@ const { Constants, CommandInteraction } = require("discord.js");
 
 module.exports = {
 	data: {
-		name: "sban11",
+		name: "sban21",
 		description: "Ban user from the server",
 		options: [
 			{
@@ -14,7 +14,7 @@ module.exports = {
 			{
 				name: "reason",
 				type: Constants.ApplicationCommandOptionTypes.STRING,
-				description: "The user to ban",
+				description: "The reason for banning them",
 				required: true
 			}
 		]
@@ -23,9 +23,16 @@ module.exports = {
 	async execute(interaction) {
 		const args = interaction.options.data;
 		
-		console.log(args);
-		console.log(interaction.options.getString("reason", true));
+		const userToBan = interaction.options.getUser("user", true);
+		const banReason = interaction.options.getString("reason", true);
 		
-		await interaction.reply("Ban hammer: ");
+		const banString = `
+			**Banned user:** <@${userToBan.id}> (${userToBan.id})
+			**Reason:** ${banReason}
+			**Duration:** N/A
+			**Staff member:** ${interaction.member.user.username}
+		`.replaceAll("\t","");
+		
+		await interaction.reply(banString);
 	}
 };
