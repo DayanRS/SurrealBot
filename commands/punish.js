@@ -31,7 +31,7 @@ module.exports = {
 		const punishDuration = interaction.options.getString("duration", true);
 		const punishReason = interaction.options.getString("reason", true);
 		
-		const punishRole = interaction.guild.roles.cache.find(role => role.name === "Punished");
+		const punishRole = (await interaction.guild.roles.fetch()).filter((role) => role.name === "Punished");
 		
 		const punishNotes = [];
 		
@@ -110,6 +110,7 @@ module.exports = {
 		
 		const punishDB = require("../services/db");
 		await punishDB.insert({
+			guildId: interaction.guild.id,
 			userId: userToPunish.id,
 			reason: punishReason,
 			time: Date.now(),

@@ -5,12 +5,16 @@ const mongoUri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONG
 const mongoClient = new MongoClient(mongoUri);
 
 let isConnected = false;
+let punishes;
 
 module.exports = {
 	async connect() {
 		try {
 			await mongoClient.connect();
 			isConnected = true;
+			
+			const db = mongoClient.db("SurrealBot");
+			punishes = db.collection("Punishments");
 			
 			process.on("SIGINT", () => {	//close db connection when the app closes
 				mongoClient.close(() => {
@@ -27,15 +31,12 @@ module.exports = {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
 			
-			const db = mongoClient.db("SurrealBot");
-			const punishes = db.collection("Punishments");
-			
 			const result = await punishes.findOne(query);
 			
 			return(result);
 			
 		} catch(err) {
-			console.log(err);
+			console.error(err);
 			return(null);
 		}
 	},
@@ -43,9 +44,6 @@ module.exports = {
 	async findAll() {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
-			
-			const db = mongoClient.db("SurrealBot");
-			const punishes = db.collection("Punishments");
 			
 			const result = await punishes.find({}, {	//gets all entries
 				sort: {
@@ -56,7 +54,7 @@ module.exports = {
 			return(result.toArray());
 			
 		} catch(err) {
-			console.log(err);
+			console.error(err);
 			return(null);
 		}
 	},
@@ -65,15 +63,26 @@ module.exports = {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
 			
-			const db = mongoClient.db("SurrealBot");
-			const punishes = db.collection("Punishments");
-			
 			const result = await punishes.insertOne(entry);
 			
-			console.log(result);
+			if(result.insertedId) console.log("Entry added to database");
 			
 		} catch(err) {
-			console.log(err);
+			console.error(err);
+		}
+	},
+	
+	async deleteOne(query) {
+		try {
+			if(!isConnected) await module.exports.connect();	//connect to db if not already
+			
+			const result = await punishes.deleteOne(query);
+			
+			if(result.deletedCount === 1) {
+				console.log("Entry removed from database");
+			}
+		} catch(err) {
+			console.error(err);
 		}
 	}
 };

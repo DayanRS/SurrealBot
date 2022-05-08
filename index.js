@@ -3,6 +3,7 @@ const { Client, Collection, Intents } = require("discord.js");
 const { DISCORD_TOKEN } = require("dotenv").config().parsed;
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+module.exports = client;	//surely there's a nicer way to do this
 
 //initialise commands
 client.commands = new Collection();
@@ -26,24 +27,14 @@ for(const fileName of eventFiles) {
 	}
 }
 
-//initialise database - TODO: Move to punish handler
-const punishDB = require("./services/db");
+//initialise database
 (async () => {
-	await punishDB.connect();
+	await require("./services/db").connect();
+	
+	//require("./handlers/punishHandler").removePunishment();
 	
 	setInterval(async () => {
-		let punishes = await punishDB.findAll();
-		
-		console.log(punishes);
-		
-		for(let i = 0; i < punishes.length; i++) {
-			let timeDiff = (Date.now() - punishes[i].time)/1000;	//in seconds
-			
-			if(timeDiff > punishes[i].duration) {
-				console.log(`Punish time up for id: ${punishes[i].userId}`);
-				//unpunish
-			}
-		}
+		require("./handlers/punishHandler").checkPunishments();
 	}, 10000);
 })();
 
