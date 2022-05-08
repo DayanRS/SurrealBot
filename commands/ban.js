@@ -1,8 +1,8 @@
-const { Constants } = require("discord.js");
+const { Permissions, Constants } = require("discord.js");
 
 module.exports = {
 	data: {
-		name: "sban21",
+		name: "sban",
 		description: "Ban user from the server",
 		options: [
 			{
@@ -21,24 +21,38 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
-		//const args = interaction.options.data;
 		const userToBan = interaction.options.getUser("username", true);
 		const banReason = interaction.options.getString("reason", true);
+		const commandUser = interaction.member.user;
 		
-		//TODO: Implement ban logic
-		//-Check permissions
-		//-User validation (in server, not self, not same/higher role, etc)
-		//-Send message to user
-		//-Send message in log channel
-		//-Execute the ban
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.BAN_MEMBERS)) return;	//check commandUser permissions
+		
+		if(!interaction.guild.me.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {		//check bot permissions
+			await interaction.reply(`${interaction.guild.me.user.username} does not have permissions to ban in this server.`);
+			return;
+		}
+		
+		if(interaction.guild.members.resolve(userToBan).permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {	//check userToBan permissions
+			await interaction.reply("This user cannot be banned.");
+			return;
+		}
+		
+		await userToBan.send(`You have been banned from ${interaction.guild.name}. Reason: ${banReason}`);
 		
 		const banString = `
 			**Banned user:** <@${userToBan.id}> (${userToBan.id})
 			**Reason:** ${banReason}
 			**Duration:** Permanent
-			**Staff member:** ${interaction.member.user.username}
+			**Staff member:** ${commandUser.username}
 		`.replaceAll("\t","");
 		
-		await interaction.reply(banString);
+		await interaction.guild.bans.create(userToBan,
+			{
+				reason: banReason
+			})
+			.then(async (banInfo) => {
+				await interaction.reply(banString);
+			})
+			.catch(console.error);
 	}
 };
