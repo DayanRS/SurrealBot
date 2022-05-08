@@ -2,7 +2,7 @@ const { Constants, Permissions } = require("discord.js");
 
 module.exports = {
 	data: {
-		name: "sban6",
+		name: "sban",
 		description: "Ban user from the server",
 		options: [
 			{
@@ -66,7 +66,7 @@ module.exports = {
 				await interaction.reply(banString);
 			})
 			.catch(async (err) => {
-				await interaction.reply(`Error: ${err.message}`);
+				await interaction.reply(`**Error:** ${err.message}`);
 			});
 	}
 };

@@ -2,7 +2,7 @@ const { Permissions, Constants } = require("discord.js");
 
 module.exports = {
 	data: {
-		name: "sunban7",
+		name: "sunban",
 		description: "Unban user from the server",
 		options: [
 			{
@@ -27,10 +27,10 @@ module.exports = {
 		
 		await interaction.guild.bans.remove(userToUnban)
 		.then(async () => {
-			await interaction.reply(`Unbanned user: <@${userToUnban.id}> (${userToUnban.id})`);
+			await interaction.reply(`**Unbanned user:** <@${userToUnban.id}> (${userToUnban.id})`);
 		})
 		.catch(async (err) => {
-			await interaction.reply(`Error: ${err.message}`);
+			await interaction.reply(`**Error:** ${err.message}`);
 		});
 	}
 };

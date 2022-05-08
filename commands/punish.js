@@ -2,7 +2,7 @@ const { Constants, Permissions } = require("discord.js");
 
 module.exports = {
 	data: {
-		name: "spunish4",
+		name: "spunish",
 		description: "Temporarily punish user",
 		options: [
 			{
@@ -47,9 +47,16 @@ module.exports = {
 			return;
 		}
 		
-		if(!interaction.guild.members.resolve(userToPunish)) {	//check if userToPunish is a member of the guild - TODO: Test
-			await interaction.reply(`${interaction.guild.me.user.username} is not a member of this server.`);
-		} else if(interaction.guild.members.resolve(userToPunish).permissions.has(Permissions.FLAGS.MUTE_MEMBERS)) {	//check userToPunish permissions
+		let guildMemberToPunish;
+		
+		try {
+			guildMemberToPunish = await interaction.guild.members.fetch(userToPunish);
+		} catch(err) {
+			await interaction.reply(`<@${userToPunish.id}> (${userToPunish.id}) is not a member of this server.`);
+			return;
+		}
+		
+		if(guildMemberToPunish.permissions.has(Permissions.FLAGS.MUTE_MEMBERS)) {	//check userToPunish permissions
 			await interaction.reply("That user cannot be punished.");
 			return;
 		}
