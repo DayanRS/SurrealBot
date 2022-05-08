@@ -105,8 +105,16 @@ module.exports = {
 		//-validation checks
 		//-message user if possible
 		//-apply punishment
-		//-message in log channel
 		//-store details in db
+		//-message in log channel
+		
+		const punishDB = require("../services/db");
+		await punishDB.insert({
+			userId: userToPunish.id,
+			reason: punishReason,
+			time: Date.now(),
+			duration: splitTime[0]
+		});
 		
 		let punishString = `
 			**Punished user:** <@${userToPunish.id}> (${userToPunish.id})

@@ -2,23 +2,6 @@ const fs = require("node:fs");
 const { Client, Collection, Intents } = require("discord.js");
 const { DISCORD_TOKEN } = require("dotenv").config().parsed;
 
-
-let testDB = require("./services/db");
-
-testDB.queryDB({
-	id: "12345"
-}).then((result) => {
-	console.log("the result!");
-	console.log(result);
-});
-
-
-
-
-
-
-
-
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 //initialise commands
@@ -42,5 +25,26 @@ for(const fileName of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+//initialise database - TODO: Move to punish handler
+const punishDB = require("./services/db");
+(async () => {
+	await punishDB.connect();
+	
+	setInterval(async () => {
+		let punishes = await punishDB.findAll();
+		
+		console.log(punishes);
+		
+		for(let i = 0; i < punishes.length; i++) {
+			let timeDiff = (Date.now() - punishes[i].time)/1000;	//in seconds
+			
+			if(timeDiff > punishes[i].duration) {
+				console.log(`Punish time up for id: ${punishes[i].userId}`);
+				//unpunish
+			}
+		}
+	}, 10000);
+})();
 
 client.login(DISCORD_TOKEN);
