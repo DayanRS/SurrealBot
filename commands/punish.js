@@ -2,7 +2,7 @@ const { Constants, Permissions } = require("discord.js");
 
 module.exports = {
 	data: {
-		name: "spunish3",
+		name: "spunish4",
 		description: "Temporarily punish user",
 		options: [
 			{
@@ -31,6 +31,8 @@ module.exports = {
 		const punishDuration = interaction.options.getString("duration", true);
 		const punishReason = interaction.options.getString("reason", true);
 		
+		const punishRole = interaction.guild.roles.cache.find(role => role.name === "Punished");
+		
 		const punishNotes = [];
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MUTE_MEMBERS)) return;	//check commandUser permissions
@@ -40,7 +42,12 @@ module.exports = {
 			return;
 		}
 		
-		if(!interaction.guild.members.resolve(userToPunish)) {	//check if userToPunish is a member of the guild
+		if(!punishRole) {
+			await interaction.reply(`"Punished" role does not exist in this server.`);
+			return;
+		}
+		
+		if(!interaction.guild.members.resolve(userToPunish)) {	//check if userToPunish is a member of the guild - TODO: Test
 			await interaction.reply(`${interaction.guild.me.user.username} is not a member of this server.`);
 		} else if(interaction.guild.members.resolve(userToPunish).permissions.has(Permissions.FLAGS.MUTE_MEMBERS)) {	//check userToPunish permissions
 			await interaction.reply("That user cannot be punished.");
@@ -91,6 +98,7 @@ module.exports = {
 		}
 		
 		//apply punishment
+		await interaction.guild.members.resolve(userToPunish).roles.add(punishRole);
 		
 		//Process:
 		//-check permissions

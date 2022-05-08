@@ -2,6 +2,23 @@ const fs = require("node:fs");
 const { Client, Collection, Intents } = require("discord.js");
 const { DISCORD_TOKEN } = require("dotenv").config().parsed;
 
+
+let testDB = require("./services/db");
+
+testDB.queryDB({
+	id: "12345"
+}).then((result) => {
+	console.log("the result!");
+	console.log(result);
+});
+
+
+
+
+
+
+
+
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 //initialise commands
