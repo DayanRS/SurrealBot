@@ -2,7 +2,7 @@ const { Permissions, Constants } = require("discord.js");
 
 module.exports = {
 	data: {
-		name: "sban",
+		name: "sban6",
 		description: "Ban user from the server",
 		options: [
 			{
@@ -25,6 +25,8 @@ module.exports = {
 		const banReason = interaction.options.getString("reason", true);
 		const commandUser = interaction.member.user;
 		
+		const banNotes = [];
+		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.BAN_MEMBERS)) return;	//check commandUser permissions
 		
 		if(!interaction.guild.me.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {		//check bot permissions
@@ -32,19 +34,29 @@ module.exports = {
 			return;
 		}
 		
-		if(interaction.guild.members.resolve(userToBan).permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {	//check userToBan permissions
+		if(!interaction.guild.members.resolve(userToBan)) {	//check if userToBan is a member of the guild
+			banNotes.push("User not in guild prior to ban");
+		} else if(interaction.guild.members.resolve(userToBan).permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {	//check userToBan permissions
 			await interaction.reply("This user cannot be banned.");
 			return;
 		}
 		
-		await userToBan.send(`You have been banned from ${interaction.guild.name}. Reason: ${banReason}`);
-		
-		const banString = `
+		let banString = `
 			**Banned user:** <@${userToBan.id}> (${userToBan.id})
 			**Reason:** ${banReason}
 			**Duration:** Permanent
 			**Staff member:** ${commandUser.username}
 		`.replaceAll("\t","");
+		
+		try {
+			await userToBan.send(`You have been banned from ${interaction.guild.name}. Reason: ${banReason}`);
+		} catch(err) {
+			banNotes.push(err.message);
+		}
+		
+		for(let i = 0; i < banNotes.length; i++) {
+			banString += `\n**Note**: ${banNotes[i]}`;
+		}
 		
 		await interaction.guild.bans.create(userToBan,
 			{
@@ -53,6 +65,8 @@ module.exports = {
 			.then(async (banInfo) => {
 				await interaction.reply(banString);
 			})
-			.catch(console.error);
+			.catch(async (err) => {
+				await interaction.reply(`Error: ${err.message}`);
+			});
 	}
 };
