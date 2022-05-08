@@ -37,8 +37,14 @@ module.exports = {
 		if(!interaction.guild.members.resolve(userToBan)) {	//check if userToBan is a member of the guild
 			banNotes.push("User not in guild prior to ban");
 		} else if(interaction.guild.members.resolve(userToBan).permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {	//check userToBan permissions
-			await interaction.reply("This user cannot be banned.");
+			await interaction.reply("That user cannot be banned.");
 			return;
+		}
+		
+		try {
+			await userToBan.send(`You have been banned from ${interaction.guild.name}. Reason: ${banReason}`);
+		} catch(err) {
+			banNotes.push(err.message);
 		}
 		
 		let banString = `
@@ -47,12 +53,6 @@ module.exports = {
 			**Duration:** Permanent
 			**Staff member:** ${commandUser.username}
 		`.replaceAll("\t","");
-		
-		try {
-			await userToBan.send(`You have been banned from ${interaction.guild.name}. Reason: ${banReason}`);
-		} catch(err) {
-			banNotes.push(err.message);
-		}
 		
 		for(let i = 0; i < banNotes.length; i++) {
 			banString += `\n**Note**: ${banNotes[i]}`;
