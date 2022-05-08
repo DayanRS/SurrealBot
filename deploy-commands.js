@@ -17,7 +17,7 @@ const rest = new REST({ version: "9" }).setToken(DISCORD_TOKEN);
 	try {
 		console.log("Updating commands...");
 		
-		await rest.put(Routes.applicationGuildCommands(BOT_ID, DEV_GUILD_ID), { body: commands });
+		await rest.put(Routes.applicationGuildCommands(BOT_ID, DEV_GUILD_ID), { body: commands });	//deploy to dev server
 		
 		//await rest.put(Routes.applicationCommands(BOT_ID), { body: commands });	//global commands
 		
