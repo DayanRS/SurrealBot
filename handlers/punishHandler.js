@@ -20,7 +20,7 @@ module.exports = {
 	async removePunishment(punishObj) {
 		const client = require("../index");
 		
-		const guild = await client.guilds.fetch("224476458523951104");	//punishObj.guildId
+		const guild = await client.guilds.fetch(punishObj.guildId);
 		const userToUnpunish = await guild.members.fetch(punishObj.userId);	//userToUnpunish
 		const punishRole = (await guild.roles.fetch()).filter((role) => role.name === "Punished");
 		
