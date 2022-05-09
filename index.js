@@ -2,7 +2,11 @@ const fs = require("node:fs");
 const { Client, Collection, Intents } = require("discord.js");
 const { DISCORD_TOKEN } = require("dotenv").config().parsed;
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({
+	partials: ["MESSAGE", "MESSAGE_CREATE", "CHANNEL"],
+	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES]
+});
+
 module.exports = client;	//surely there's a nicer way to do this
 
 //initialise commands
@@ -29,9 +33,8 @@ for(const fileName of eventFiles) {
 
 //initialise database
 (async () => {
+	//return;	//dev
 	await require("./services/db").connect();
-	
-	//require("./handlers/punishHandler").removePunishment();
 	
 	setInterval(async () => {
 		require("./handlers/punishHandler").checkPunishments();
