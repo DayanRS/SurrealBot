@@ -5,16 +5,18 @@ const mongoUri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONG
 const mongoClient = new MongoClient(mongoUri);
 
 let isConnected = false;
-let punishes;
+let dbCollections = [];
 
 module.exports = {
+	PUNISHES : 0,
+	
 	async connect() {
 		try {
 			await mongoClient.connect();
 			isConnected = true;
 			
 			const db = mongoClient.db("SurrealBot");
-			punishes = db.collection("Punishments");
+			dbCollections[module.exports.PUNISHES] = db.collection("Punishments");
 			
 			process.on("SIGINT", () => {	//close db connection when the app closes
 				mongoClient.close(() => {
@@ -27,11 +29,11 @@ module.exports = {
 		}
 	},
 	
-	async findOne(query) {
+	async findOne(collection, query) {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
 			
-			const result = await punishes.findOne(query);
+			const result = await dbCollections[collection].findOne(query);
 			
 			return(result);
 			
@@ -41,11 +43,11 @@ module.exports = {
 		}
 	},
 	
-	async findAll() {
+	async findAll(collection) {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
 			
-			const result = await punishes.find({}, {	//gets all entries
+			const result = await dbCollections[collection].find({}, {	//gets all entries
 				sort: {
 					duration: 1		//sort lowest to highest duration
 				}
@@ -59,11 +61,11 @@ module.exports = {
 		}
 	},
 	
-	async insert(entry) {
+	async insert(collection, entry) {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
 			
-			const result = await punishes.insertOne(entry);
+			const result = await dbCollections[collection].insertOne(entry);
 			
 			if(result.insertedId) console.log("Entry added to database");
 			
@@ -72,11 +74,11 @@ module.exports = {
 		}
 	},
 	
-	async deleteOne(query) {
+	async deleteOne(collection, query) {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
 			
-			const result = await punishes.deleteOne(query);
+			const result = await dbCollections[collection].deleteOne(query);
 			
 			if(result.deletedCount === 1) {
 				console.log("Entry removed from database");

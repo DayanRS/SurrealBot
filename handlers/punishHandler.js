@@ -1,10 +1,10 @@
-const punishDB = require("../services/db");
+const db = require("../services/db");
 
 module.exports = {
 	async checkPunishments() {
 		process.stdout.write("Checking for expired punishments...");
 		
-		let punishes = await punishDB.findAll();
+		let punishes = await db.findAll(db.PUNISHES);
 		
 		console.log(` (${punishes.length})`)
 		for(let i = 0; i < punishes.length; i++) {		//check all entries for expired punishments
@@ -31,7 +31,7 @@ module.exports = {
 		if(punishObj._id) deleteObj._id = punishObj._id;	//prioritise delete by database id
 		else deleteObj.userId = punishObj.userId;
 		
-		punishDB.deleteOne(deleteObj);
+		db.deleteOne(db.PUNISHES, deleteObj);
 		
 		console.log(`Punish role removed for ${userToUnpunish.user.username}`);
 	}

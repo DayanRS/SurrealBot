@@ -115,8 +115,8 @@ module.exports = {
 		//-store details in db
 		//-message in log channel
 		
-		const punishDB = require("../services/db");
-		await punishDB.insert({
+		const db = require("../services/db");
+		await db.insert(db.PUNISHES, {
 			guildId: interaction.guild.id,
 			userId: userToPunish.id,
 			reason: punishReason,
