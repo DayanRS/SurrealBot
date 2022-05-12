@@ -62,6 +62,7 @@ module.exports = {
 	}
 };
 
+//Formats as "Fri, 12 May 2022 UTC - 5 day(s) ago"
 function formatTimestamp(timestamp) {
 	const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 	const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -74,6 +75,12 @@ function formatTimestamp(timestamp) {
 	str += monthNames[date.getUTCMonth()] + " ";
 	str += date.getUTCFullYear();
 	str += " UTC";
+	str += ` - ${getTimeDiffStr(timestamp)}`;
 	
 	return str;
+}
+
+function getTimeDiffStr(timestamp) {
+	const diffDays = Math.floor((Date.now() - timestamp)/(1000*60*60*24));
+	return `${diffDays} day(s) ago`;
 }
