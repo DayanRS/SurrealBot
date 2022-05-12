@@ -6,6 +6,7 @@ module.exports = {
 	
 	async execute(msg) {
 		if(msg.author.bot) return;	//prevent replying to self
+		if(msg.channel.type != "dm") return;
 		
 		const guild = await client.guilds.fetch(process.env.DEV_GUILD_ID);
 		
