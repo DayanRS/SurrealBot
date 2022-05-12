@@ -117,5 +117,35 @@ module.exports = {
 		} catch(err) {
 			console.error(err);
 		}
+	},
+	
+	//specifically for warn/punish history lookup - probably should be generalised
+	async testSearch(query) {
+		try {
+			if(!isConnected) await module.exports.connect();	//connect to db if not already
+			
+			const results = await dbCollections[module.exports.WARNINGS].aggregate(
+				[{
+					$match: {
+						userId: query.userId, 
+						guildId: query.guildId
+					}
+				}, {
+					$lookup: {
+						from: "Punishments", 
+						localField: "userId", 
+						foreignField: "userId", 
+						as: "punishments"
+					}
+				}]
+			);
+			
+			const resultsArr = await results.toArray();
+			
+			return resultsArr;
+		} catch(err) {
+			console.error(err);
+			return(null);
+		}
 	}
 };
