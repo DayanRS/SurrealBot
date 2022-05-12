@@ -9,6 +9,7 @@ let dbCollections = [];
 
 module.exports = {
 	PUNISHES : 0,
+	WARNINGS : 1,
 	
 	async connect() {
 		try {
@@ -17,6 +18,7 @@ module.exports = {
 			
 			const db = mongoClient.db("SurrealBot");
 			dbCollections[module.exports.PUNISHES] = db.collection("Punishments");
+			dbCollections[module.exports.WARNINGS] = db.collection("Warnings");
 			
 			process.on("SIGINT", () => {	//close db connection when the app closes
 				mongoClient.close(() => {
@@ -54,6 +56,35 @@ module.exports = {
 			});
 			
 			return(result.toArray());
+			
+		} catch(err) {
+			console.error(err);
+			return(null);
+		}
+	},
+	
+	//TODO: query, update, and maybe options, should all be passed in as params to keep logic separate
+	async findOneAndUpdate(collection, entry) {
+		try {
+			if(!isConnected) await module.exports.connect();	//connect to db if not already
+			
+			let query = {
+				guildId: entry.guildId,
+				userId: entry.userId
+			};
+			
+			let update = {
+				$push: { "warnings": entry.warnings[0] }
+			};
+			
+			let options = {
+				returnDocument: "after",
+				upsert: true	//create entry if it doesn't already exist
+			};
+			
+			const result = await dbCollections[collection].findOneAndUpdate(query, update, options);
+			
+			return(result.value);
 			
 		} catch(err) {
 			console.error(err);
