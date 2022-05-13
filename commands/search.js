@@ -20,11 +20,14 @@ module.exports = {
 		
 		const searchNotes = [];
 		
-		if (!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
-            //check commandUser permissions
-            await interaction.reply(`${commandUser.username} has insufficient permissions for this command.`);
-            return;
-        }
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
+			//check commandUser permissions
+			await interaction.reply({
+				content: `${commandUser.username} has insufficient permissions for this command.`,
+				ephemeral: true
+			});
+			return;
+		}
 		
 		let guildMemberToSearch;
 		

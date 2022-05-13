@@ -27,11 +27,14 @@ module.exports = {
 		
 		const banNotes = [];
 
-		if (!interaction.memberPermissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
-            //check commandUser permissions
-            await interaction.reply(`${commandUser.username} has insufficient permissions for this command.`);
-            return;
-        }
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
+			//check commandUser permissions
+			await interaction.reply({
+				content: `${commandUser.username} has insufficient permissions for this command.`,
+				ephemeral: true
+			});
+			return;
+		}
 		
 		if(!interaction.guild.me.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {		//check bot permissions
 			await interaction.reply(`${interaction.guild.me.user.username} does not have permissions to ban in this server.`);

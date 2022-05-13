@@ -20,11 +20,14 @@ module.exports = {
 		const punishRole = (await interaction.guild.roles.fetch()).filter((role) => role.name === "Punished");
 		const commandUser = interaction.member.user;
 		
-        if (!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
-            //check commandUser permissions
-            await interaction.reply(`${commandUser.username} has insufficient permissions for this command.`);
-            return;
-        }
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
+			//check commandUser permissions
+			await interaction.reply({
+				content: `${commandUser.username} has insufficient permissions for this command.`,
+				ephemeral: true
+			});
+			return;
+		}
 		
 		if(!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {		//check bot permissions
 			await interaction.reply(`${interaction.guild.me.user.username} does not have permissions to manage roles in this server.`);
