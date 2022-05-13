@@ -16,10 +16,15 @@ module.exports = {
 	
 	async execute(interaction) {
 		const userToSearch = interaction.options.getUser("user", true);
+		const commandUser = interaction.member.user;
 		
 		const searchNotes = [];
 		
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.MUTE_MEMBERS)) return;	//check commandUser permissions
+		if (!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
+            //check commandUser permissions
+            await interaction.reply(`${commandUser.username} has insufficient permissions for this command.`);
+            return;
+        }
 		
 		let guildMemberToSearch;
 		
