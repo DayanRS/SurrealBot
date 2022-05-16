@@ -27,8 +27,7 @@ module.exports = {
 		
 		const banNotes = [];
 
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
-			//check commandUser permissions
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.BAN_MEMBERS)) {	//check commandUser permissions
 			await interaction.reply({
 				content: `${commandUser.username} has insufficient permissions for this command.`,
 				ephemeral: true
@@ -49,7 +48,7 @@ module.exports = {
 		}
 		
 		try {
-			await userToBan.send(`You have been banned from ${interaction.guild.name}. Reason: ${banReason}`);
+			await userToBan.send(`You have been banned from **${interaction.guild.name}**. Reason: ${banReason}`);
 		} catch(err) {
 			banNotes.push(err.message);
 		}

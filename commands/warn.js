@@ -27,8 +27,7 @@ module.exports = {
 		
 		const warnNotes = [];
 		
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
-			//check commandUser permissions
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
 			await interaction.reply({
 				content: `${commandUser.username} has insufficient permissions for this command.`,
 				ephemeral: true

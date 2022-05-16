@@ -36,8 +36,7 @@ module.exports = {
 		
 		const punishNotes = [];
 
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
-			//check commandUser permissions
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
 			await interaction.reply({
 				content: `${commandUser.username} has insufficient permissions for this command.`,
 				ephemeral: true
@@ -107,7 +106,7 @@ module.exports = {
 		splitTime[1] = "s";
 		
 		try {
-			await userToPunish.send(`You have been punished in ${interaction.guild.name} for ${punishDuration}. Reason: ${punishReason}`);
+			await userToPunish.send(`You have been punished in **${interaction.guild.name}** for ${punishDuration}. Reason: ${punishReason}`);
 		} catch(err) {
 			punishNotes.push(err.message);
 		}
@@ -123,6 +122,7 @@ module.exports = {
 		//-store details in db
 		//-message in log channel
 		
+		//TODO: update if they are already punished instead of creating new entry
 		const db = require("../services/db");
 		await db.insert(db.PUNISHES, {
 			guildId: interaction.guild.id,

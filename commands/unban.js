@@ -18,8 +18,7 @@ module.exports = {
 		const userToUnban = interaction.options.getUser("username", true);
 		const commandUser = interaction.member.user;
 		
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
-			//check commandUser permissions
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.BAN_MEMBERS)) {	//check commandUser permissions
 			await interaction.reply({
 				content: `${commandUser.username} has insufficient permissions for this command.`,
 				ephemeral: true

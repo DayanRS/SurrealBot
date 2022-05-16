@@ -20,8 +20,7 @@ module.exports = {
 		
 		const searchNotes = [];
 		
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
-			//check commandUser permissions
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
 			await interaction.reply({
 				content: `${commandUser.username} has insufficient permissions for this command.`,
 				ephemeral: true
@@ -48,7 +47,7 @@ module.exports = {
 		
 		const results = resultsArr[0];
 		
-		let searchString = "";
+		let searchString = `**Search results for** <@${userToSearch.id}> (${userToSearch.id}):\n\n`;
 		
 		if(results.warnings) {
 			for(let i = 0; i < results.warnings.length; i++) {
@@ -58,7 +57,7 @@ module.exports = {
 		
 		if(results.punishments) {
 			for(let i = 0; i < results.punishments.length; i++) {
-				searchString += `**Punishment:** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]\n`;
+				searchString += `**Active Punishment:** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]\n`;
 			}
 		}
 		

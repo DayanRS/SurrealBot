@@ -20,8 +20,7 @@ module.exports = {
 		const punishRole = (await interaction.guild.roles.fetch()).filter((role) => role.name === "Punished");
 		const commandUser = interaction.member.user;
 		
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {
-			//check commandUser permissions
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
 			await interaction.reply({
 				content: `${commandUser.username} has insufficient permissions for this command.`,
 				ephemeral: true
