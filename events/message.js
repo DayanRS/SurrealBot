@@ -1,6 +1,6 @@
 require("dotenv").config();
 const client = require("../index");
-//test
+
 module.exports = {
 	name: "messageCreate",			//event name
 	
