@@ -9,6 +9,21 @@ const client = new Client({
 
 module.exports = client;	//surely there's a nicer way to do this
 
+client.getTimeString = () => {
+	const date = new Date();
+	const h = date.getUTCHours();
+	const m = date.getUTCMinutes();
+	const s = date.getUTCSeconds();
+	
+	return `[${h < 10 ? "0" + h : h}:${m < 10 ? "0" + m : m}.${s < 10 ? "0" + s : s}] `;
+};
+
+client._log = console.log;
+console.log = (...args) => {
+	process.stdout.write(client.getTimeString());
+	client._log(...args);
+}
+
 //initialise commands
 client.commands = new Collection();
 const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".js"));	//array of js file names

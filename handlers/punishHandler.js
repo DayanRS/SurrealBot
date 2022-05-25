@@ -3,11 +3,11 @@ const client = require("../index");
 
 module.exports = {
 	async checkPunishments() {
-		process.stdout.write("Checking for expired punishments...");
+		process.stdout.write(`${client.getTimeString()}Checking for expired punishments...`);
 		
 		const punishes = await db.findAll(db.PUNISHES);	//list of punishes in DB
 		
-		console.log(` (${punishes.length})`);
+		client._log(` (${punishes.length})`);
 		
 		for(let i = 0; i < punishes.length; i++) {		//check all entries for expired punishments
 			let timeDiff = (Date.now() - punishes[i].time)/1000;	//in seconds
