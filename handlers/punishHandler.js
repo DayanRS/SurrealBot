@@ -21,10 +21,17 @@ module.exports = {
 		const client = require("../index");
 		
 		const guild = await client.guilds.fetch(punishObj.guildId);
-		const userToUnpunish = await guild.members.fetch(punishObj.userId);	//userToUnpunish
 		const punishRole = (await guild.roles.fetch()).filter((role) => role.name === "Punished");
 		
-		await userToUnpunish.roles.remove(punishRole);
+		try {
+			const userToUnpunish = await guild.members.fetch(punishObj.userId);
+			await userToUnpunish.roles.remove(punishRole);
+			
+			console.log(`Punish role removed for ${userToUnpunish.user.username}`);
+			
+		} catch(err) {	//user likely no longer in guild
+			console.log(`Error removing punishment for ${punishObj.userId}: ${err.message}`);
+		}
 		
 		const deleteObj = {};
 		
@@ -32,7 +39,5 @@ module.exports = {
 		else deleteObj.userId = punishObj.userId;
 		
 		db.deleteOne(db.PUNISHES, deleteObj);
-		
-		console.log(`Punish role removed for ${userToUnpunish.user.username}`);
 	}
 };
