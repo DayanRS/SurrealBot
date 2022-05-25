@@ -22,7 +22,7 @@ module.exports = {
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
 			await interaction.reply({
-				content: `${commandUser.username} has insufficient permissions for this command.`,
+				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
 			return;
