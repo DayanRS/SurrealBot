@@ -32,10 +32,10 @@ module.exports = {
 		const punishReason = interaction.options.getString("reason", true);
 		const commandUser = interaction.member.user;
 		
-		const punishRole = (await interaction.guild.roles.fetch()).filter((role) => role.name === "Punished");
+		const punishRole = ((await interaction.guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
 		
 		const punishNotes = [];
-
+		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
 			await interaction.reply({
 				content: "You have insufficient permissions for this command.",
@@ -65,6 +65,11 @@ module.exports = {
 		
 		if(guildMemberToPunish.permissions.has(Permissions.FLAGS.MUTE_MEMBERS)) {	//check userToPunish permissions
 			await interaction.reply("That user cannot be punished.");
+			return;
+		}
+		
+		if(guildMemberToPunish.roles.cache.some(role => role.id === punishRole.id)) {
+			await interaction.reply(`<@${userToPunish.id}> (${userToPunish.id}) is already punished. Use \`/ssearch\` to review punishment, \`/sunpunish\` before punishing again, or \`/sban\` if applicable.`);
 			return;
 		}
 		
@@ -122,7 +127,7 @@ module.exports = {
 		//-store details in db
 		//-message in log channel
 		
-		//TODO: update if they are already punished instead of creating new entry
+		//TODO: handle multiple punishments
 		const db = require("../services/db");
 		await db.insert(db.PUNISHES, {
 			guildId: interaction.guild.id,

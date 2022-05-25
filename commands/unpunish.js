@@ -48,6 +48,7 @@ module.exports = {
 		}
 		
 		await punishHandler.removePunishment({
+			guildId: interaction.guild.id,
 			userId: userToUnpunish.id
 		});
 		
