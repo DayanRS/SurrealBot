@@ -19,6 +19,8 @@ module.exports = {
 			
 		const result = await welcomeChannel.send({ embeds: [embedMessage] });
 		
-		result.react("👋");
+		await result.react("👋");
+		
+		require("../handlers/punishHandler").checkPunishments();	//reapply punishment if necessary
 	}
 };
