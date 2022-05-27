@@ -23,7 +23,7 @@ module.exports = {
 		
 		try {
 			let displayName = commandUser.displayName;
-			let ganglessName = displayName.replace("/「.*」/", ""); //remove gang sign, but keep server nick, applicable
+			let ganglessName = displayName.replace("/「.*」/", ""); //remove gang sign, but keep server nick, if applicable
 			await commandUser.setNickname(ganglessName);
 			
 			await interaction.reply("Successfully left gang");
