@@ -10,6 +10,7 @@ let dbCollections = [];
 module.exports = {
 	PUNISHES : 0,
 	WARNINGS : 1,
+	COMMANDS: 2,
 	
 	async connect() {
 		try {
@@ -20,6 +21,7 @@ module.exports = {
 			const db = mongoClient.db("SurrealBot");
 			dbCollections[module.exports.PUNISHES] = db.collection("Punishments");
 			dbCollections[module.exports.WARNINGS] = db.collection("Warnings");
+			dbCollections[module.exports.COMMANDS] = db.collection("Commands");
 			
 			process.on("SIGINT", () => {	//close db connection when the app closes
 				mongoClient.close(() => {
