@@ -1,5 +1,4 @@
 const { Constants, Permissions } = require("discord.js");
-const { fetchCommands } = require("../handlers/customCommandHandler");
 
 module.exports = {
 	data: {
@@ -17,12 +16,21 @@ module.exports = {
 				type: Constants.ApplicationCommandOptionTypes.STRING,
 				description: "The link containing content you want shown when executing the command",
 				required: true
+			},
+			{
+				name: "description",
+				type: Constants.ApplicationCommandOptionTypes.STRING,
+				description: "The description for the command",
 			}
 		]
 	},
 	async execute(interaction) {
         const commandName = interaction.options.getString("name");
         const commandLink = interaction.options.getString("link");
+        let commandDesc = interaction.options.getString("description");
+		if(!commandDesc) {
+			commandDesc = "There is no description for this command";
+		}
 		const commandUser = interaction.member;	//as GuildMember
 
         if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
@@ -45,7 +53,9 @@ module.exports = {
 		await db.insert(db.COMMANDS, {
 			commandName: commandName,
 			link: commandLink,
+			description: commandDesc,
 		});
+
 	}
 
 };
