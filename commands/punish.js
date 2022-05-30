@@ -63,7 +63,7 @@ module.exports = {
 			return;
 		}
 		
-		if(guildMemberToPunish.permissions.has(Permissions.FLAGS.MUTE_MEMBERS)) {	//check userToPunish permissions
+		if(guildMemberToPunish.permissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check userToPunish permissions
 			await interaction.reply("That user cannot be punished.");
 			return;
 		}

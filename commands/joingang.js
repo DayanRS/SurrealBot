@@ -31,7 +31,7 @@ module.exports = {
 		}
 		
 		try {
-			await commandUser.setNickname(`${commandUser.user.username} 「${gangToJoin}」`);
+			await commandUser.setNickname(`${commandUser.displayName} 「${gangToJoin}」`);
 			
 			await interaction.reply(`Joined ${gangToJoin}`);
 		} catch(err) {
