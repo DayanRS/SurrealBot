@@ -15,6 +15,7 @@ module.exports = {
 		try {
 			await mongoClient.connect();
 			isConnected = true;
+			console.log("Connected to DB");
 			
 			const db = mongoClient.db("SurrealBot");
 			dbCollections[module.exports.PUNISHES] = db.collection("Punishments");
