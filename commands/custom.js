@@ -12,9 +12,9 @@ module.exports = {
 				required: true
 			},
             {
-				name: "link",
+				name: "content",
 				type: Constants.ApplicationCommandOptionTypes.STRING,
-				description: "The link containing content you want shown when executing the command",
+				description: "The content you want shown when executing the command",
 				required: true
 			},
 			{
@@ -26,7 +26,7 @@ module.exports = {
 	},
 	async execute(interaction) {
         const commandName = interaction.options.getString("name");
-        const commandLink = interaction.options.getString("link");
+        const commandContent = interaction.options.getString("content");
         let commandDesc = interaction.options.getString("description");
 		if(!commandDesc) {
 			commandDesc = "There is no description for this command";
@@ -40,33 +40,14 @@ module.exports = {
 			});
 			return;
 		}
-		
-        
-		if(!isValidHttpUrl(commandLink)) {
-			await interaction.reply({
-                content: "The argument provided is not a link.",
-			});
-			return;
-		}
 
 		const db = require("../services/db");
 		await db.insert(db.COMMANDS, {
 			commandName: commandName,
-			link: commandLink,
+			content: commandContent,
 			description: commandDesc,
 		});
 
 	}
 
 };
-function isValidHttpUrl(string) {
-	let url;
-	
-	try {
-	  url = new URL(string);
-	} catch (_) {
-	  return false;  
-	}
-  
-	return url.protocol === "http:" || url.protocol === "https:";
-  }
