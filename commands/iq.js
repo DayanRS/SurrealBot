@@ -27,7 +27,7 @@ module.exports = {
         let iq = this.getIQ(iqUser.username);
 
         await interaction.reply({
-            content: `<@${iqUser.id}> has an IQ of ${iq}.`
+            content: `<@${iqUser.id}> has an IQ of ${iq} out of 180.`
         });
 
 	},
