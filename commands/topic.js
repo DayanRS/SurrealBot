@@ -2,8 +2,6 @@ module.exports = {
 	data: {
 		name: "topic",
 		description: "Get a random conversation topic.",
-		options: [
-		]
 	},
 	async execute(interaction) {
 		let topicList = this.getTopicList();
