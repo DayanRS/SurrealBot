@@ -1,4 +1,4 @@
-const { Constants } = require("discord.js");
+const { Constants, MessageEmbed } = require("discord.js");
 
 module.exports = {
 	data: {
@@ -9,17 +9,11 @@ module.exports = {
 				name: "user",
 				type: Constants.ApplicationCommandOptionTypes.USER,
 				description: "The name of the user",
-			},
-            {
-				name: "default",
-				type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
-				description: "Display the user avatar instead of the server specific avatar?",
 			}
 		]
 	},
 	async execute(interaction) {
 		let targetUser = interaction.options.getUser("user");
-        const defaultAvatar = interaction.options.getBoolean("default");
 		const commandUser = interaction.member;	//as GuildMember
 		
         if(!targetUser) {
@@ -36,14 +30,15 @@ module.exports = {
 			}
         }
 
-        await interaction.reply({
-            content: `${
-                defaultAvatar
-                ?
-                targetUser.user.displayAvatarURL({size: 4096, dynamic: true})
-                :
-                targetUser.displayAvatarURL({size: 4096, dynamic: true})
-            }`
-        });
+		const embedMessage = new MessageEmbed()
+		.setColor("#ff9b00")
+		.setAuthor({
+			name: commandUser.user.username,
+			iconURL: commandUser.displayAvatarURL()
+		})
+		.setDescription("Avatar of " + targetUser.displayName + ":")
+		.setImage(targetUser.displayAvatarURL({size: 4096, dynamic: true}));
+		
+        await interaction.reply({ embeds: [embedMessage] });
 	}
 };
