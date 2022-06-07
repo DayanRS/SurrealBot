@@ -22,7 +22,7 @@ module.exports = {
 
 
         await interaction.reply({
-            content: `${targetUser.displayAvatarURL()}`
+            content: `${targetUser.displayAvatarURL({size: 4096, dynamic: true})}?size=512`
         });
 	}
 };
