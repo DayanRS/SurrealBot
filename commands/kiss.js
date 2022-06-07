@@ -19,14 +19,14 @@ module.exports = {
 
         if(!kissTarget || kissTarget.username == commandUser.user.username) {
             await interaction.reply({
-				content: `${commandUser} somehow managed to kissed themselves.`
+				content: `${commandUser} somehow managed to kiss themselves.`
 			});
 			return;
         }
 
 
         await interaction.reply({
-            content: `<@${kissTarget.id}> has been kissed by <@${commandUser.user.id}> 💋`
+            content: `<@${kissTarget.id}> you have been kissed by <@${commandUser.user.id}> 💋`
         });
 
 	},

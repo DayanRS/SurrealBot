@@ -26,7 +26,7 @@ module.exports = {
 
 
         await interaction.reply({
-            content: `<@${hugTarget.id}> has been hugged by <@${commandUser.user.id}> ❤️`
+            content: `<@${hugTarget.id}> you have been hugged by <@${commandUser.user.id}> ❤️`
         });
 
 	},
