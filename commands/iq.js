@@ -22,9 +22,19 @@ module.exports = {
 				content: `${commandUser} has an IQ of 5.`
 			});
 			return;
+        } else {
+            try {
+				iqUser = await interaction.guild.members.fetch(iqUser);
+			} catch(err) {
+				await interaction.reply({
+					content: `<@${iqUser.id}> (${iqUser.id}) is not a member of this server.`,
+					ephemeral: true
+				});
+				return;
+			}
         }
 
-        let iq = this.getIQ(iqUser.username);
+        let iq = this.getIQ(iqUser.displayName);
 
         await interaction.reply({
             content: `<@${iqUser.id}> has an IQ of ${iq} out of 180.`
