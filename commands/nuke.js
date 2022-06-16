@@ -12,22 +12,20 @@ module.exports = {
 			}
 		]
 	},
+	
 	async execute(interaction) {
-		let nukeTarget = interaction.options.getUser("user");
+		const nukeTarget = interaction.options.getUser("user");
 		const commandUser = interaction.member;	//as GuildMember
 		
-
-        if(!nukeTarget || nukeTarget.username == commandUser.user.username) {
-            await interaction.reply({
+		if(!nukeTarget || nukeTarget.username == commandUser.user.username) {
+			await interaction.reply({
 				content: `${commandUser} RIP you nuked yourself, rough day buddy`
 			});
 			return;
-        }
-
-
-        await interaction.reply({
-            content: `☢️ **WARNING** ☢️ <@${nukeTarget.id}> 💣 you 💣 have 💣 been 💣 nuked 💣 by 💣 <@${commandUser.user.id}> ☢️ **WARNING** ☢️`
-        });
-
-	},
+		}
+		
+		await interaction.reply({
+			content: `☢️ **WARNING** ☢️ <@${nukeTarget.id}> 💣 you 💣 have 💣 been 💣 nuked 💣 by 💣 <@${commandUser.user.id}> ☢️ **WARNING** ☢️`
+		});
+	}
 };

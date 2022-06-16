@@ -12,22 +12,20 @@ module.exports = {
 			}
 		]
 	},
+	
 	async execute(interaction) {
-		let kissTarget = interaction.options.getUser("user");
+		const kissTarget = interaction.options.getUser("user");
 		const commandUser = interaction.member;	//as GuildMember
 		
-
-        if(!kissTarget || kissTarget.username == commandUser.user.username) {
-            await interaction.reply({
-				content: `${commandUser} somehow managed to kiss themselves.`
+		if(!kissTarget || kissTarget.username == commandUser.user.username) {
+			await interaction.reply({
+				content: `${commandUser} somehow managed to kiss themself.`
 			});
 			return;
-        }
-
-
-        await interaction.reply({
-            content: `<@${kissTarget.id}> you have been kissed by <@${commandUser.user.id}> 💋`
-        });
-
-	},
+		}
+		
+		await interaction.reply({
+			content: `<@${kissTarget.id}> you have been kissed by <@${commandUser.user.id}> 💋`
+		});
+	}
 };

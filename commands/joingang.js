@@ -13,6 +13,7 @@ module.exports = {
 			}
 		]
 	},
+	
 	async execute(interaction) {
 		const gangToJoin = interaction.options.getString("gang", true);
 		const commandUser = interaction.member;	//as GuildMember
@@ -32,8 +33,8 @@ module.exports = {
 		
 		try {
 			await commandUser.setNickname(`${commandUser.displayName} 「${gangToJoin}」`);
-			
 			await interaction.reply(`Joined ${gangToJoin}`);
+			
 		} catch(err) {
 			await interaction.reply({
 				content: `Error setting name: ${err.message}`,

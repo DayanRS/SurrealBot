@@ -12,22 +12,20 @@ module.exports = {
 			}
 		]
 	},
+	
 	async execute(interaction) {
-		let hugTarget = interaction.options.getUser("user");
+		const hugTarget = interaction.options.getUser("user");
 		const commandUser = interaction.member;	//as GuildMember
 		
-
-        if(!hugTarget || hugTarget.username == commandUser.user.username) {
-            await interaction.reply({
+		if(!hugTarget || hugTarget.username == commandUser.user.username) {
+			await interaction.reply({
 				content: `${commandUser} hugged themselves lol`
 			});
 			return;
-        }
-
-
-        await interaction.reply({
-            content: `<@${hugTarget.id}> you have been hugged by <@${commandUser.user.id}> ❤️`
-        });
-
-	},
+		}
+		
+		await interaction.reply({
+			content: `<@${hugTarget.id}> you have been hugged by <@${commandUser.user.id}> ❤️`
+		});
+	}
 };

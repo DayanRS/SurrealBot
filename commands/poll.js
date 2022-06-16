@@ -9,24 +9,23 @@ module.exports = {
 				name: "message",
 				type: Constants.ApplicationCommandOptionTypes.STRING,
 				description: "What are you polling?",
-                required: true
+				required: true
 			}
 		]
 	},
+	
 	async execute(interaction) {
-		let pollMsg = interaction.options.getString("message");
+		const pollMsg = interaction.options.getString("message");
 		const commandUser = interaction.member;	//as GuildMember
 		
-
 		const embedMessage = new MessageEmbed()
-		.setColor("#ff9b00")
-        .setTitle(pollMsg)
-		.setDescription("Polled by " + commandUser.displayName);
+			.setColor("#ff9b00")
+			.setTitle(pollMsg)
+			.setDescription("Polled by " + commandUser.displayName);
 		
-        const pollInteraction = await interaction.reply({ embeds: [embedMessage], fetchReply: true });
-
-
-        await pollInteraction.react("✅");
-        await pollInteraction.react("⛔");
+		const pollInteraction = await interaction.reply({ embeds: [embedMessage], fetchReply: true });
+		
+		await pollInteraction.react("✅");
+		await pollInteraction.react("⛔");
 	}
 };

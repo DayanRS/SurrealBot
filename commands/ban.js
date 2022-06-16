@@ -67,12 +67,12 @@ module.exports = {
 		await interaction.guild.bans.create(userToBan,
 			{
 				reason: banReason
-			})
-			.then(async (banInfo) => {
-				await interaction.reply(banString);
-			})
-			.catch(async (err) => {
-				await interaction.reply(`**Error:** ${err.message}`);
-			});
+			}
+		).then(async (banInfo) => {
+			await interaction.reply(banString);
+		})
+		.catch(async (err) => {
+			await interaction.reply(`**Error:** ${err.message}`);
+		});
 	}
 };

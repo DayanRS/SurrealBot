@@ -5,6 +5,7 @@ module.exports = {
 		name: "leavegang",
 		description: "Remove gang from your nickname"
 	},
+	
 	async execute(interaction) {
 		const commandUser = interaction.member;	//as GuildMember
 		
@@ -13,6 +14,7 @@ module.exports = {
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
+			
 			return;
 		}
 		
@@ -22,15 +24,14 @@ module.exports = {
 		}
 		
 		try {
-
 			let preDisplayName = commandUser.displayName;
 			let ganglessName = preDisplayName.replace(/「.*」/, ""); //remove gang sign, but keep server nick, if applicable
 			
 			if(preDisplayName == ganglessName) { throw Error("Not currently in a gang"); }
 			
 			await commandUser.setNickname(ganglessName);
-			
 			await interaction.reply("Successfully left gang");
+			
 		} catch(err) {
 			await interaction.reply({
 				content: `Error setting name: ${err.message}`,
