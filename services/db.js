@@ -116,9 +116,14 @@ module.exports = {
 			
 			if(result.deletedCount === 1) {
 				console.log("Entry removed from database");
+				return true;
 			}
+			
+			return false;
+			
 		} catch(err) {
 			console.error(err);
+			return false;
 		}
 	},
 	

@@ -46,11 +46,13 @@ module.exports = {
 		}
 		
 		const customCommandHandler = require("../handlers/customCommandHandler");
-		customCommandHandler.addCommand({
+		await customCommandHandler.addCommand({
 			guildId: interaction.guildId,
 			commandName: commandName,
 			commandContent: commandContent,
 			commandDescription: commandDesc
 		});
+		
+		await interaction.reply(`Created command: ${commandName}`);
 	}
 };

@@ -37,6 +37,13 @@ module.exports = {
 		}
 		
 		await db.insert(db.COMMANDS, commandData);
+	},
+	
+	async removeCommand(commandData) {
+		let deleteSuccess = await db.deleteOne(db.COMMANDS, commandData);
+		if(deleteSuccess) delete client.customCommands[commandData.guildId][commandData.commandName];
+		
+		return deleteSuccess;
 	}
 };
 
