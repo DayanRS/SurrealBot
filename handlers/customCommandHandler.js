@@ -31,6 +31,7 @@ module.exports = {
 		}
 		
 		if(client.customCommands[commandData.guildId][commandData.commandName]) {	//command name exists - overwrite
+			//TODO
 			
 		} else {
 			client.customCommands[commandData.guildId][commandData.commandName] = commandData.commandContent;

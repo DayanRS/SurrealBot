@@ -22,7 +22,10 @@ function handleDM(msg) {
 function handleOther(msg) {
 	const guildId = msg.guildId;
 	const guildCustomCommands = client.customCommands[guildId];
-	const customCommandKeys = Object.keys(client.customCommands[guildId]);
+	
+	if(!guildCustomCommands) return;	//guild doesn't have any custom commands
+	
+	const customCommandKeys = Object.keys(guildCustomCommands);
 	
 	for(let i = 0; i < customCommandKeys.length; i++) {
 		if(msg.content.includes(customCommandKeys[i])) {
