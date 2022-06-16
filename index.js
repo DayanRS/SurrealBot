@@ -27,6 +27,7 @@ console.log = (...args) => {
 //initialise commands
 client.commands = new Collection();
 const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".js"));	//array of js file names
+client.customCommands = {};
 
 for(const fileName of commandFiles) {
 	const command = require(`./commands/${fileName}`);	//import command module
@@ -50,6 +51,7 @@ for(const fileName of eventFiles) {
 (async () => {
 	//return;	//dev
 	await require("./services/db").connect();
+	await require("./handlers/customCommandHandler").loadCommands();
 	
 	setInterval(async () => {
 		require("./handlers/punishHandler").checkPunishments();

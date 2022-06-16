@@ -45,11 +45,12 @@ module.exports = {
 			return;
 		}
 		
-		const db = require("../services/db");
-		await db.insert(db.COMMANDS, {
+		const customCommandHandler = require("../handlers/customCommandHandler");
+		customCommandHandler.addCommand({
+			guildId: interaction.guildId,
 			commandName: commandName,
-			content: commandContent,
-			description: commandDesc,
+			commandContent: commandContent,
+			commandDescription: commandDesc
 		});
 	}
 };
