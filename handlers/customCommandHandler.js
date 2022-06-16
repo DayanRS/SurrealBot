@@ -30,12 +30,19 @@ module.exports = {
 			client.customCommands[commandData.guildId] = {};
 		}
 		
-		if(client.customCommands[commandData.guildId][commandData.commandName]) {	//command name exists - overwrite
-			//TODO
+		if(client.customCommands[commandData.guildId][commandData.commandName]) {	//command name exists - remove first
+			let deleteSuccess = await this.removeCommand({
+				guildId: commandData.guildId,
+				commandName: commandData.commandName
+			});
 			
-		} else {
-			client.customCommands[commandData.guildId][commandData.commandName] = commandData.commandContent;
+			if(!deleteSuccess) {
+				console.log("Error creating command: " + commandData);
+				return;
+			}
 		}
+		
+		client.customCommands[commandData.guildId][commandData.commandName] = commandData.commandContent;
 		
 		await db.insert(db.COMMANDS, commandData);
 	},
