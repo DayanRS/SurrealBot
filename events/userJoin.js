@@ -4,7 +4,7 @@ module.exports = {
 	name: "guildMemberAdd",	//user joins the server
 	
 	async execute(newMember) {
-		const welcomeChannel = newMember.guild.channels.cache.filter(channel => channel.name === "welcome").at(0);
+		const welcomeChannel = newMember.guild.channels.cache.filter(channel => channel.name === "general").at(0);
 		
 		if(!welcomeChannel) return;
 		
