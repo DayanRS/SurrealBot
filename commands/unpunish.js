@@ -47,11 +47,20 @@ module.exports = {
 			return;
 		}
 		
+		let isSuccess = await punishHandler.removeCustomPunishment({
+			guildId: interaction.guild.id,
+			userId: userToUnpunish.id
+		});
+		/*
 		await punishHandler.removePunishment({
 			guildId: interaction.guild.id,
 			userId: userToUnpunish.id
 		});
-		
-		await interaction.reply(`**Removed punish for user:** <@${userToUnpunish.id}> (${userToUnpunish.id})`);
+		*/
+		if(isSuccess) {
+			await interaction.reply(`**Removed punish for user:** <@${userToUnpunish.id}> (${userToUnpunish.id})`);
+		} else {
+			await interaction.reply(`**Could not remove punish for user:** <@${userToUnpunish.id}> (${userToUnpunish.id})`);
+		}
 	}
 };

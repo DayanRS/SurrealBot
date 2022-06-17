@@ -50,6 +50,15 @@ module.exports = {
 		if(punishObj._id) deleteObj._id = punishObj._id;	//prioritise delete by database id
 		else deleteObj.userId = punishObj.userId;
 		
-		db.deleteOne(db.PUNISHES, deleteObj);
+		await db.deleteOne(db.PUNISHES, deleteObj);
+	},
+	
+	async removeCustomPunishment(punishInfo) {	//guildId and userId
+		let punishObj = await db.findOne(db.PUNISHES, punishInfo);
+		if(!punishObj) return false;
+		
+		await this.removePunishment(punishObj);
+		
+		return true;
 	}
 };
