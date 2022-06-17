@@ -29,7 +29,7 @@ function handleOther(msg) {
 	
 	for(let i = 0; i < customCommandKeys.length; i++) {
 		if(msg.content === customCommandKeys[i]) {
-			client.channels.cache.get(msg.channel.id).send(guildCustomCommands[customCommandKeys[i]])
+			msg.channel.send(guildCustomCommands[customCommandKeys[i]]);
 			break;
 		}
 	}
