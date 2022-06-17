@@ -51,12 +51,7 @@ module.exports = {
 			guildId: interaction.guild.id,
 			userId: userToUnpunish.id
 		});
-		/*
-		await punishHandler.removePunishment({
-			guildId: interaction.guild.id,
-			userId: userToUnpunish.id
-		});
-		*/
+		
 		if(isSuccess) {
 			await interaction.reply(`**Removed punish for user:** <@${userToUnpunish.id}> (${userToUnpunish.id})`);
 		} else {
