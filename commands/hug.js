@@ -19,7 +19,7 @@ module.exports = {
 		
 		if(!hugTarget || hugTarget.username == commandUser.user.username) {
 			await interaction.reply({
-				content: `${commandUser} hugged themselves lol`
+				content: `${commandUser} hugged themself lol`
 			});
 			return;
 		}

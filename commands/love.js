@@ -19,7 +19,7 @@ module.exports = {
 		
 		if(!lover || lover.username == commandUser.user.username) {
 			await interaction.reply({
-				content: `${commandUser} loves themselves 100%: ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️`
+				content: `${commandUser} loves themself 100%: ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️`
 			});
 			
 			return;
