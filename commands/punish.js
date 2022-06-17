@@ -116,8 +116,10 @@ module.exports = {
 			punishNotes.push(err.message);
 		}
 		
+		let roles = interaction.guild.members.resolve(userToPunish).roles.cache.filter(role => role.name != "@everyone").map(role => role.id);	//array of role ids
+		
 		//apply punishment
-		await interaction.guild.members.resolve(userToPunish).roles.add(punishRole);
+		await interaction.guild.members.resolve(userToPunish).roles.set([punishRole]);
 		
 		//Process:
 		//-check permissions
@@ -134,7 +136,8 @@ module.exports = {
 			userId: userToPunish.id,
 			reason: punishReason,
 			time: Date.now(),
-			duration: splitTime[0]
+			duration: splitTime[0],
+			roles: roles
 		});
 		
 		let punishString = `
