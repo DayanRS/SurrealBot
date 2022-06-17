@@ -27,7 +27,7 @@ module.exports = {
 	
 	async execute(interaction) {
 		const commandName = interaction.options.getString("name");
-		const commandContent = interaction.options.getString("content");
+		let commandContent = interaction.options.getString("content");
 		let commandDesc = interaction.options.getString("description");
 		
 		if(!commandDesc) {
@@ -44,6 +44,8 @@ module.exports = {
 			
 			return;
 		}
+
+		commandContent = commandContent.replace(/(@everyone|@here)/gmi, "hehe");	//makes it unabusable
 		
 		const customCommandHandler = require("../handlers/customCommandHandler");
 		await customCommandHandler.addCommand({

@@ -3,7 +3,7 @@ const client = require("../index");
 
 module.exports = {
 	async loadCommands() {	//only run on bot start
-		const commandsInDB = await db.findAll(db.COMMANDS);	//list of punishes in DB
+		const commandsInDB = await db.findAll(db.COMMANDS);	//list of commands in DB
 		
 		let customCommands = {};
 		let count = 0;
