@@ -4,7 +4,9 @@ module.exports = {
 	name: "guildMemberAdd",	//user joins the server
 	
 	async execute(newMember) {
-		const welcomeChannel = await newMember.guild.channels.fetch("546342028162891776");	//TODO: make channel ID not hardcoded
+		const welcomeChannel = newMember.guild.channels.cache.filter(channel => channel.name === "welcome").at(0);
+		
+		if(!welcomeChannel) return;
 		
 		const embedMessage = new MessageEmbed()
 			.setColor("#ff9b00")
