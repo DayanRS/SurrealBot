@@ -67,7 +67,7 @@ module.exports = {
 			]
 		});
 		
-		if(result.warnings.length >= 3) warnNotes.push("User has 3 or more warnings");
+		if(result.warnings.length >= 3) warnNotes.push("User has 3 or more warnings/punishments");
 		
 		let warnString = `
 			**Warned user:** <@${userToWarn.id}> (${userToWarn.id})
