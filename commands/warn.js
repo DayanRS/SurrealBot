@@ -61,7 +61,8 @@ module.exports = {
 				{
 					time: Date.now(),
 					reason: warnReason,
-					staff: interaction.member.user.id
+					staff: interaction.member.user.id,
+					type: "Warning"
 				}
 			]
 		});

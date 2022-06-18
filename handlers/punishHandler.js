@@ -14,7 +14,7 @@ module.exports = {
 			
 			if(timeDiff > punishes[i].duration) {	//punish expired
 				console.log(`Punish time up for id: ${punishes[i].userId}`);
-				module.exports.removePunishment(punishes[i]);
+				module.exports.removePunishment(punishes[i], "Expired");
 				
 			} else {	//punish not expired
 				const guild = await client.guilds.fetch(punishes[i].guildId);
@@ -32,7 +32,7 @@ module.exports = {
 		}
 	},
 	
-	async removePunishment(punishObj) {
+	async removePunishment(punishObj, status) {
 		const guild = await client.guilds.fetch(punishObj.guildId);
 		
 		try {
@@ -51,13 +51,26 @@ module.exports = {
 		else deleteObj.userId = punishObj.userId;
 		
 		await db.deleteOne(db.PUNISHES, deleteObj);
+		
+		await db.findOneAndUpdate(db.WARNINGS, {
+			guildId: punishObj.guildId,
+			userId: punishObj.userId,
+			warnings: [
+				{
+					time: Date.now(),
+					reason: punishObj.reason,
+					staff: punishObj.staff,
+					type: `Punishment (${status})`
+				}
+			]
+		});
 	},
 	
 	async removeCustomPunishment(punishInfo) {	//guildId and userId
 		let punishObj = await db.findOne(db.PUNISHES, punishInfo);
 		if(!punishObj) return false;
 		
-		await this.removePunishment(punishObj);
+		await this.removePunishment(punishObj, "Quashed");
 		
 		return true;
 	}

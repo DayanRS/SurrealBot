@@ -138,6 +138,7 @@ module.exports = {
 			guildId: interaction.guild.id,
 			userId: userToPunish.id,
 			reason: punishReason,
+			staff: interaction.member.user.id,
 			time: Date.now(),
 			duration: splitTime[0],
 			roles: roles

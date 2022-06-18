@@ -59,13 +59,13 @@ module.exports = {
 		
 		if(results.warnings) {
 			for(let i = 0; i < results.warnings.length; i++) {
-				searchString += `**Warning:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
+				searchString += `**${results.warnings[i].type}:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
 			}
 		}
 		
 		if(results.punishments) {
 			for(let i = 0; i < results.punishments.length; i++) {
-				searchString += `**Active Punishment:** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]\n`;
+				searchString += `**Punishment (Active):** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]\n`;
 			}
 		}
 		
