@@ -59,7 +59,10 @@ module.exports = {
 		
 		if(results.warnings) {
 			for(let i = 0; i < results.warnings.length; i++) {
-				searchString += `**${results.warnings[i].type}:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
+				let infracType = results.warnings[i].type;
+				if(results.warnings[i].status) infracType += ` (${results.warnings[i].status})`;
+				
+				searchString += `**${infracType}:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
 			}
 		}
 		

@@ -55,7 +55,7 @@ for(const fileName of eventFiles) {
 	
 	setInterval(async () => {
 		require("./handlers/punishHandler").checkPunishments();
-	}, 10000);
+	}, 60000);
 })();
 
 client.login(DISCORD_TOKEN);

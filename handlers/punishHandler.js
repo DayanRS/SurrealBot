@@ -72,7 +72,8 @@ module.exports = {
 					time: Date.now(),
 					reason: punishObj.reason,
 					staff: punishObj.staff,
-					type: `Punishment (${status})`,
+					type: "Punishment",
+					status: status,
 					roles: punishObj.roles
 				}
 			]
