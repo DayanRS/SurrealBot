@@ -15,16 +15,19 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const emoji = interaction.options.getString("emoji");
 		
 		if(emoji.length <= 2) {
-			await interaction.reply("Could not enlarge basic emoji.");
+			await interaction.editReply("Could not enlarge basic emoji.");
 			return;
 		}
 		
 		let emojiUrl = this.getEmoji(emoji);
 		
-		await interaction.reply({
+		await interaction.editReply({
 			content: `${emojiUrl}`
 		});
 	},

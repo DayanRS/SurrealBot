@@ -14,6 +14,9 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		let question = interaction.options.getString("question");
 		let questionOld = question;
 		
@@ -26,7 +29,7 @@ module.exports = {
 		
 		if(triedToPing) question = "";
 		
-		await interaction.reply({
+		await interaction.editReply({
 			content: `You asked ${question ? `"${question}"` : "nothing"}... ${triedToPing ? pingMessage : this.get8Ball()}`
 		});
 	},

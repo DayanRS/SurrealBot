@@ -21,6 +21,9 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const userToWarn = interaction.options.getUser("user", true);
 		const warnReason = interaction.options.getString("reason", true);
 		const commandUser = interaction.member.user;
@@ -28,7 +31,7 @@ module.exports = {
 		const warnNotes = [];
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
-			await interaction.reply({
+			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
@@ -40,7 +43,7 @@ module.exports = {
 		try {
 			guildMemberToWarn = await interaction.guild.members.fetch(userToWarn);
 		} catch(err) {
-			await interaction.reply(`<@${userToWarn.id}> (${userToWarn.id}) is not a member of this server.`);
+			await interaction.editReply(`<@${userToWarn.id}> (${userToWarn.id}) is not a member of this server.`);
 			return;
 		}
 		
@@ -75,6 +78,6 @@ module.exports = {
 			warnString += `\n**Note**: ${warnNotes[i]}`;
 		}
 		
-		await interaction.reply(warnString);
+		await interaction.editReply(warnString);
 	}
 };

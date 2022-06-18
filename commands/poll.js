@@ -15,6 +15,9 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const pollMsg = interaction.options.getString("message");
 		const commandUser = interaction.member;	//as GuildMember
 		
@@ -23,7 +26,7 @@ module.exports = {
 			.setTitle(pollMsg)
 			.setDescription("Polled by " + commandUser.displayName);
 		
-		const pollInteraction = await interaction.reply({ embeds: [embedMessage], fetchReply: true });
+		const pollInteraction = await interaction.editReply({ embeds: [embedMessage], fetchReply: true });
 		
 		await pollInteraction.react("✅");
 		await pollInteraction.react("⛔");

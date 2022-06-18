@@ -26,6 +26,9 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const commandName = interaction.options.getString("name");
 		let commandContent = interaction.options.getString("content");
 		let commandDesc = interaction.options.getString("description");
@@ -37,7 +40,7 @@ module.exports = {
 		const commandUser = interaction.member;	//as GuildMember
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
-			await interaction.reply({
+			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
@@ -55,6 +58,6 @@ module.exports = {
 			commandDescription: commandDesc
 		});
 		
-		await interaction.reply(`Created command: ${commandName}`);
+		await interaction.editReply(`Created command: ${commandName}`);
 	}
 };

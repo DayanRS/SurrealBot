@@ -27,6 +27,9 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const userToPunish = interaction.options.getUser("user", true);
 		const punishDuration = interaction.options.getString("duration", true);
 		const punishReason = interaction.options.getString("reason", true);
@@ -37,7 +40,7 @@ module.exports = {
 		const punishNotes = [];
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
-			await interaction.reply({
+			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
@@ -45,12 +48,12 @@ module.exports = {
 		}
 		
 		if(!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {		//check bot permissions
-			await interaction.reply(`${interaction.guild.me.user.username} does not have permissions to manage roles in this server.`);
+			await interaction.editReply(`${interaction.guild.me.user.username} does not have permissions to manage roles in this server.`);
 			return;
 		}
 		
 		if(!punishRole) {
-			await interaction.reply(`"Punished" role does not exist in this server.`);
+			await interaction.editReply(`"Punished" role does not exist in this server.`);
 			return;
 		}
 		
@@ -59,24 +62,24 @@ module.exports = {
 		try {
 			guildMemberToPunish = await interaction.guild.members.fetch(userToPunish);
 		} catch(err) {
-			await interaction.reply(`<@${userToPunish.id}> (${userToPunish.id}) is not a member of this server.`);
+			await interaction.editReply(`<@${userToPunish.id}> (${userToPunish.id}) is not a member of this server.`);
 			return;
 		}
 		
 		if(guildMemberToPunish.permissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check userToPunish permissions
-			await interaction.reply("That user cannot be punished.");
+			await interaction.editReply("That user cannot be punished.");
 			return;
 		}
 		
 		if(guildMemberToPunish.roles.cache.some(role => role.id === punishRole.id)) {
-			await interaction.reply(`<@${userToPunish.id}> (${userToPunish.id}) is already punished. Use \`/ssearch\` to review punishment, \`/sunpunish\` before punishing again, or \`/sban\` if applicable.`);
+			await interaction.editReply(`<@${userToPunish.id}> (${userToPunish.id}) is already punished. Use \`/ssearch\` to review punishment, \`/sunpunish\` before punishing again, or \`/sban\` if applicable.`);
 			return;
 		}
 		
 		//validate time string and convert to seconds
 		const isValidTime = /^[0-9]+[smhdw]$/g.test(punishDuration);
 		if(!isValidTime) {
-			await interaction.reply("Invalid time string: " + punishDuration);
+			await interaction.editReply("Invalid time string: " + punishDuration);
 			return;
 		}
 		
@@ -104,7 +107,7 @@ module.exports = {
 				break;
 				
 			default:
-				await interaction.reply("Error parsing time string: " + punishDuration);
+				await interaction.editReply("Error parsing time string: " + punishDuration);
 				return;
 		}
 		
@@ -151,6 +154,6 @@ module.exports = {
 			punishString += `\n**Note**: ${punishNotes[i]}`;
 		}
 		
-		await interaction.reply(punishString);
+		await interaction.editReply(punishString);
 	}
 };

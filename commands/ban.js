@@ -21,6 +21,9 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const userToBan = interaction.options.getUser("username", true);
 		const banReason = interaction.options.getString("reason", true);
 		const commandUser = interaction.member.user;
@@ -28,7 +31,7 @@ module.exports = {
 		const banNotes = [];
 
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.BAN_MEMBERS)) {	//check commandUser permissions
-			await interaction.reply({
+			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
@@ -36,14 +39,14 @@ module.exports = {
 		}
 		
 		if(!interaction.guild.me.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {		//check bot permissions
-			await interaction.reply(`${interaction.guild.me.user.username} does not have permissions to ban in this server.`);
+			await interaction.editReply(`${interaction.guild.me.user.username} does not have permissions to ban in this server.`);
 			return;
 		}
 		
 		if(!interaction.guild.members.resolve(userToBan)) {	//check if userToBan is a member of the guild
 			banNotes.push("User not in guild prior to ban");
 		} else if(interaction.guild.members.resolve(userToBan).permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {	//check userToBan permissions
-			await interaction.reply("That user cannot be banned.");
+			await interaction.editReply("That user cannot be banned.");
 			return;
 		}
 		
@@ -69,10 +72,10 @@ module.exports = {
 				reason: banReason
 			}
 		).then(async (banInfo) => {
-			await interaction.reply(banString);
+			await interaction.editReply(banString);
 		})
 		.catch(async (err) => {
-			await interaction.reply(`**Error:** ${err.message}`);
+			await interaction.editReply(`**Error:** ${err.message}`);
 		});
 	}
 };

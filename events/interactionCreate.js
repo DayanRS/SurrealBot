@@ -15,10 +15,17 @@ module.exports = {
 		} catch(err) {
 			console.error(err);
 			
-			await interaction.reply({
+			const errMessage = {
 				content: "Error executing command",
 				ephemeral: true		//only the user can see this reply
-			});
+			};
+			
+			if(interaction.isDeferred) {
+				await interaction.editReply(errMessage);
+				return;
+			}
+			
+			await interaction.reply(errMessage);
 		}
 	}
 };
