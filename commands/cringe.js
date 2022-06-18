@@ -49,7 +49,7 @@ module.exports = {
 		}
 		
 		if(guildMemberToCringe.permissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check userToCringe permissions
-			await interaction.editReply("That user cannot be punished.");
+			await interaction.editReply("That user cannot be cringed.");
 			return;
 		}
 		
