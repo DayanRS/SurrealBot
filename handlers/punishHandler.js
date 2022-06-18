@@ -37,8 +37,10 @@ module.exports = {
 	},
 	
 	async removePunishment(punishObj, status) {
+		let guild;
+		
 		try {
-			const guild = await client.guilds.fetch(punishObj.guildId);
+			guild = await client.guilds.fetch(punishObj.guildId);
 		} catch(err) {
 			console.log(`Error removing punishment - could not find guild ID: ${punishObj.guildId}`);
 			ignoreList.push(punishObj.guildId);
@@ -70,7 +72,8 @@ module.exports = {
 					time: Date.now(),
 					reason: punishObj.reason,
 					staff: punishObj.staff,
-					type: `Punishment (${status})`
+					type: `Punishment (${status})`,
+					roles: punishObj.roles
 				}
 			]
 		});
