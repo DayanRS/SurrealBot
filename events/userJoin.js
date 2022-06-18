@@ -15,7 +15,7 @@ module.exports = {
 			.addField("**You should:**",
 				`- Read the rules
 				- Ask any questions you have
-				- Say hi :chicken:
+				- Say hi ${newMember.guild.emojis.cache.get("530151376274194432")}
 				`.replaceAll("\t",""))
 			.setThumbnail(newMember.user.displayAvatarURL({ dynamic: true }));	//dynamic for animated avatars
 			
