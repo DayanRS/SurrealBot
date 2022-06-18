@@ -21,7 +21,16 @@ module.exports = {
 				module.exports.removePunishment(punishes[i], "Expired");
 				
 			} else {	//punish not expired
-				const guild = await client.guilds.fetch(punishes[i].guildId);
+				let guild;
+				
+				try {
+					guild = await client.guilds.fetch(punishes[i].guildId);
+				} catch(err) {
+					console.log(`Error reapplying punishment - could not find guild ID: ${punishes[i].guildId}`);
+					ignoreList.push(punishes[i].guildId);
+					return;
+				}
+				
 				const punishRole = ((await guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
 				const punishedMembers = punishRole.members;		//list of users with punished role
 				
