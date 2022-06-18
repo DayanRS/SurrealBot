@@ -1,5 +1,3 @@
-const { Constants, MessageEmbed } = require("discord.js");
-
 module.exports = {
 	data: {
 		name: "events",
@@ -7,7 +5,7 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
-		await interaction.deferReply();
+		await interaction.deferReply({ ephemeral: true });
 		interaction.isDeferred = true;
 		
 		const commandUser = interaction.member;	//as GuildMember
