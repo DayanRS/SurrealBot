@@ -15,13 +15,16 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const userToSearch = interaction.options.getUser("user", true);
 		const commandUser = interaction.member.user;
 		
 		const searchNotes = [];
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
-			await interaction.reply({
+			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
@@ -33,7 +36,7 @@ module.exports = {
 		try {
 			guildMemberToSearch = await interaction.guild.members.fetch(userToSearch);
 		} catch(err) {
-			await interaction.reply(`<@${userToSearch.id}> (${userToSearch.id}) is not a member of this server.`);
+			await interaction.editReply(`<@${userToSearch.id}> (${userToSearch.id}) is not a member of this server.`);
 			return;
 		}
 		
@@ -45,19 +48,27 @@ module.exports = {
 		
 		if(resultsArr.length > 1) searchNotes.push("Duplicate database entries (Should not happen)");
 		
+		if(resultsArr.length === 0) {
+			await interaction.editReply(`<@${userToSearch.id}> (${userToSearch.id}) has a clean slate.`);
+			return;
+		}
+		
 		const results = resultsArr[0];
 		
 		let searchString = `**Search results for** <@${userToSearch.id}> (${userToSearch.id}):\n\n`;
 		
 		if(results.warnings) {
 			for(let i = 0; i < results.warnings.length; i++) {
-				searchString += `**Warning:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
+				let infracType = results.warnings[i].type;
+				if(results.warnings[i].status) infracType += ` (${results.warnings[i].status})`;
+				
+				searchString += `**${infracType}:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
 			}
 		}
 		
 		if(results.punishments) {
 			for(let i = 0; i < results.punishments.length; i++) {
-				searchString += `**Active Punishment:** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]\n`;
+				searchString += `**Punishment (Active):** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]\n`;
 			}
 		}
 		
@@ -65,7 +76,7 @@ module.exports = {
 			searchString += `\n**Note**: ${searchNotes[i]}`;
 		}
 		
-		await interaction.reply(searchString);
+		await interaction.editReply(searchString);
 	}
 };
 

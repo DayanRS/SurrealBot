@@ -14,11 +14,14 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const lover = interaction.options.getUser("lover");
 		const commandUser = interaction.member;	//as GuildMember
 		
 		if(!lover || lover.username == commandUser.user.username) {
-			await interaction.reply({
+			await interaction.editReply({
 				content: `${commandUser} loves themself 100%: ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️`
 			});
 			
@@ -29,7 +32,7 @@ module.exports = {
 		let numHearts = Math.round(lovePercentage / 10);
 		let loveString = "💖".repeat(numHearts) + "💔".repeat(10 - numHearts);
 		
-		await interaction.reply({
+		await interaction.editReply({
 			content: `${commandUser} loves ${lover} ${lovePercentage}%: ${loveString}`
 		});
 	}

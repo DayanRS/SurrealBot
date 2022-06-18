@@ -7,6 +7,9 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		console.log(interaction.client.customCommands[interaction.guildId]);
 		
 		const guildCustomCommands = interaction.client.customCommands[interaction.guildId];
@@ -14,10 +17,10 @@ module.exports = {
 		let customCommandKeys;
 		
 		if(!guildCustomCommands || (customCommandKeys = Object.keys(guildCustomCommands)).length === 0) {	//guild doesn't have any custom commands
-			interaction.reply("This guild doesn't currently have any custom commands");
+			interaction.editReply("This guild doesn't currently have any custom commands");
 			return;	
 		}
 		
-		interaction.reply("Custom commands:\n" + customCommandKeys.toString().replaceAll(",", ", "));
+		interaction.editReply("Custom commands:\n" + customCommandKeys.toString().replaceAll(",", ", "));
 	}
 };

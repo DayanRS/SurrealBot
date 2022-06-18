@@ -14,6 +14,9 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		let targetUser = interaction.options.getUser("user");
 		const commandUser = interaction.member;	//as GuildMember
 		
@@ -24,7 +27,7 @@ module.exports = {
 			try {
 				targetUser = await interaction.guild.members.fetch(targetUser);
 			} catch(err) {
-				await interaction.reply({
+				await interaction.editReply({
 					content: `<@${targetUser.id}> (${targetUser.id}) is not a member of this server.`,
 					ephemeral: true
 				});
@@ -57,6 +60,6 @@ module.exports = {
 			.setTimestamp()
 			.setThumbnail(targetUser.user.displayAvatarURL({ dynamic: true }));	//dynamic for animated avatars
 		
-		await interaction.reply({ embeds: [embedMessage] });
+		await interaction.editReply({ embeds: [embedMessage] });
 	}
 };

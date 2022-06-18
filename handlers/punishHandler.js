@@ -1,23 +1,36 @@
 const db = require("../services/db");
 const client = require("../index");
 
+let ignoreList = [];	//guilds to ignore punishments from
+
 module.exports = {
 	async checkPunishments() {
 		process.stdout.write(`${client.getTimeString()}Checking for expired punishments...`);
 		
 		const punishes = await db.findAll(db.PUNISHES);	//list of punishes in DB
 		
-		client._log(` (${punishes.length})`);
+		client._log(` (${punishes.length})`);	//TODO: handle ignores properly
 		
 		for(let i = 0; i < punishes.length; i++) {		//check all entries for expired punishments
 			let timeDiff = (Date.now() - punishes[i].time)/1000;	//in seconds
 			
+			if(ignoreList.indexOf(punishes[i].guildId) >= 0) continue;
+			
 			if(timeDiff > punishes[i].duration) {	//punish expired
 				console.log(`Punish time up for id: ${punishes[i].userId}`);
-				module.exports.removePunishment(punishes[i]);
+				module.exports.removePunishment(punishes[i], "Expired");
 				
 			} else {	//punish not expired
-				const guild = await client.guilds.fetch(punishes[i].guildId);
+				let guild;
+				
+				try {
+					guild = await client.guilds.fetch(punishes[i].guildId);
+				} catch(err) {
+					console.log(`Error reapplying punishment - could not find guild ID: ${punishes[i].guildId}`);
+					ignoreList.push(punishes[i].guildId);
+					return;
+				}
+				
 				const punishRole = ((await guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
 				const punishedMembers = punishRole.members;		//list of users with punished role
 				
@@ -32,8 +45,16 @@ module.exports = {
 		}
 	},
 	
-	async removePunishment(punishObj) {
-		const guild = await client.guilds.fetch(punishObj.guildId);
+	async removePunishment(punishObj, status) {
+		let guild;
+		
+		try {
+			guild = await client.guilds.fetch(punishObj.guildId);
+		} catch(err) {
+			console.log(`Error removing punishment - could not find guild ID: ${punishObj.guildId}`);
+			ignoreList.push(punishObj.guildId);
+			return;
+		}
 		
 		try {
 			const userToUnpunish = await guild.members.fetch(punishObj.userId);
@@ -51,13 +72,28 @@ module.exports = {
 		else deleteObj.userId = punishObj.userId;
 		
 		await db.deleteOne(db.PUNISHES, deleteObj);
+		
+		await db.findOneAndUpdate(db.WARNINGS, {
+			guildId: punishObj.guildId,
+			userId: punishObj.userId,
+			warnings: [
+				{
+					time: Date.now(),
+					reason: punishObj.reason,
+					staff: punishObj.staff,
+					type: "Punishment",
+					status: status,
+					roles: punishObj.roles
+				}
+			]
+		});
 	},
 	
 	async removeCustomPunishment(punishInfo) {	//guildId and userId
 		let punishObj = await db.findOne(db.PUNISHES, punishInfo);
 		if(!punishObj) return false;
 		
-		await this.removePunishment(punishObj);
+		await this.removePunishment(punishObj, "Quashed");
 		
 		return true;
 	}

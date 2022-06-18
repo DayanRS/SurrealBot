@@ -7,10 +7,13 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const commandUser = interaction.member;	//as GuildMember
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.CHANGE_NICKNAME)) {	//check commandUser permissions
-			await interaction.reply({
+			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
@@ -19,7 +22,7 @@ module.exports = {
 		}
 		
 		if(!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_NICKNAMES)) {		//check bot permissions
-			await interaction.reply(`${interaction.guild.me.user.username} does not have permissions to manage roles in this server.`);
+			await interaction.editReply(`${interaction.guild.me.user.username} does not have permissions to manage roles in this server.`);
 			return;
 		}
 		
@@ -30,10 +33,10 @@ module.exports = {
 			if(preDisplayName == ganglessName) { throw Error("Not currently in a gang"); }
 			
 			await commandUser.setNickname(ganglessName);
-			await interaction.reply("Successfully left gang");
+			await interaction.editReply("Successfully left gang");
 			
 		} catch(err) {
-			await interaction.reply({
+			await interaction.editReply({
 				content: `Error setting name: ${err.message}`,
 				ephemeral: true
 			});

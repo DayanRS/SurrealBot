@@ -15,13 +15,16 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const punishHandler = require("../handlers/punishHandler");
 		const userToUnpunish = interaction.options.getUser("user", true);
 		const punishRole = (await interaction.guild.roles.fetch()).filter((role) => role.name === "Punished");
 		const commandUser = interaction.member.user;
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
-			await interaction.reply({
+			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
@@ -29,12 +32,12 @@ module.exports = {
 		}
 		
 		if(!interaction.guild.me.permissions.has(Permissions.FLAGS.MANAGE_ROLES)) {		//check bot permissions
-			await interaction.reply(`${interaction.guild.me.user.username} does not have permissions to manage roles in this server.`);
+			await interaction.editReply(`${interaction.guild.me.user.username} does not have permissions to manage roles in this server.`);
 			return;
 		}
 		
 		if(!punishRole) {
-			await interaction.reply(`"Punished" role does not exist in this server.`);
+			await interaction.editReply(`"Punished" role does not exist in this server.`);
 			return;
 		}
 		
@@ -43,7 +46,7 @@ module.exports = {
 		try {
 			guildMemberToUnpunish = await interaction.guild.members.fetch(userToUnpunish);
 		} catch(err) {
-			await interaction.reply(`<@${userToUnpunish.id}> (${userToUnpunish.id}) is not a member of this server.`);
+			await interaction.editReply(`<@${userToUnpunish.id}> (${userToUnpunish.id}) is not a member of this server.`);
 			return;
 		}
 		
@@ -53,9 +56,9 @@ module.exports = {
 		});
 		
 		if(isSuccess) {
-			await interaction.reply(`**Removed punish for user:** <@${userToUnpunish.id}> (${userToUnpunish.id})`);
+			await interaction.editReply(`**Removed punish for user:** <@${userToUnpunish.id}> (${userToUnpunish.id})`);
 		} else {
-			await interaction.reply(`**Could not remove punish for user:** <@${userToUnpunish.id}> (${userToUnpunish.id})`);
+			await interaction.editReply(`**Could not remove punish for user:** <@${userToUnpunish.id}> (${userToUnpunish.id})`);
 		}
 	}
 };

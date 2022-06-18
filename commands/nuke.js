@@ -14,17 +14,20 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		const nukeTarget = interaction.options.getUser("user");
 		const commandUser = interaction.member;	//as GuildMember
 		
 		if(!nukeTarget || nukeTarget.username == commandUser.user.username) {
-			await interaction.reply({
+			await interaction.editReply({
 				content: `${commandUser} RIP you nuked yourself, rough day buddy`
 			});
 			return;
 		}
 		
-		await interaction.reply({
+		await interaction.editReply({
 			content: `☢️ **WARNING** ☢️ <@${nukeTarget.id}> 💣 you 💣 have 💣 been 💣 nuked 💣 by 💣 <@${commandUser.user.id}> ☢️ **WARNING** ☢️`
 		});
 	}

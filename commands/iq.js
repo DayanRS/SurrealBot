@@ -14,11 +14,14 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
+		await interaction.deferReply();
+		interaction.isDeferred = true;
+		
 		let iqUser = interaction.options.getUser("user");
 		const commandUser = interaction.member;	//as GuildMember
 		
 		if(!iqUser || iqUser.username == commandUser.user.username) {
-			await interaction.reply({
+			await interaction.editReply({
 				content: `${commandUser} has an IQ of 5.`
 			});
 			return;
@@ -27,7 +30,7 @@ module.exports = {
 			try {
 				iqUser = await interaction.guild.members.fetch(iqUser);
 			} catch(err) {
-				await interaction.reply({
+				await interaction.editReply({
 					content: `<@${iqUser.id}> (${iqUser.id}) is not a member of this server.`,
 					ephemeral: true
 				});
@@ -38,7 +41,7 @@ module.exports = {
 		
 		let iq = this.getIQ(iqUser.displayName);
 		
-		await interaction.reply({
+		await interaction.editReply({
 			content: `<@${iqUser.id}> has an IQ of ${iq} out of 180.`
 		});
 	},

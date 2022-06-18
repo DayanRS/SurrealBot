@@ -15,12 +15,14 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
-		const commandName = interaction.options.getString("name");
+		await interaction.deferReply();
+		interaction.isDeferred = true;
 		
+		const commandName = interaction.options.getString("name");
 		const commandUser = interaction.member;	//as GuildMember
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
-			await interaction.reply({
+			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
@@ -35,9 +37,9 @@ module.exports = {
 		});
 		
 		if(deleteSuccess) {
-			await interaction.reply(`Removed command: ${commandName}`);
+			await interaction.editReply(`Removed command: ${commandName}`);
 		} else {
-			await interaction.reply(`Error removing command: ${commandName}`);
+			await interaction.editReply(`Error removing command: ${commandName}`);
 		}
 	}
 };
