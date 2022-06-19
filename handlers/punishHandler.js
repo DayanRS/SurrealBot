@@ -4,7 +4,9 @@ const client = require("../index");
 let ignoreList = [];	//guilds to ignore punishments from
 
 module.exports = {
-	async checkPunishments() {
+	async checkPunishments(userToCheck) {	//optional obj with userId and guildId to check if should be punished but isn't
+		let userCheckResult = null;
+		
 		process.stdout.write(`${client.getTimeString()}Checking for expired punishments...`);
 		
 		const punishes = await db.findAll(db.PUNISHES);	//list of punishes in DB
@@ -28,7 +30,7 @@ module.exports = {
 				} catch(err) {
 					console.log(`Error reapplying punishment - could not find guild ID: ${punishes[i].guildId}`);
 					ignoreList.push(punishes[i].guildId);
-					return;
+					continue;
 				}
 				
 				const punishRole = ((await guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
@@ -37,12 +39,15 @@ module.exports = {
 				try {
 					if(!punishedMembers.has(punishes[i].userId)) {	//user doesn't have punished role
 						await guild.members.resolve(punishes[i].userId).roles.set([punishRole]);	//give them the role again!
+						if(userToCheck && userToCheck.guildId == punishes[i].guildId && userToCheck.userId == punishes[i].userId) userCheckResult = punishes[i];
 					}
 				} catch(err) {
 					//probably not a member of the guild
 				}
 			}
 		}
+		
+		return userCheckResult;
 	},
 	
 	async removePunishment(punishObj, status) {

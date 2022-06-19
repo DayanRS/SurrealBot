@@ -4,7 +4,28 @@ module.exports = {
 	name: "guildMemberAdd",	//user joins the server
 	
 	async execute(newMember) {
+		let memberPunishObj = await require("../handlers/punishHandler").checkPunishments({	//reapply punishment if necessary
+			userId: newMember.id,
+			guildId: newMember.guild.id
+		});
+		
 		const welcomeChannel = newMember.guild.channels.cache.filter(channel => channel.name === "general").at(0);
+		
+		if(memberPunishObj) {
+			let count = 0;
+			let repunish = async () => {	//reapply punish role to prevent bots (mee6) overriding it
+				if(count++ > 7) return;
+				
+				const punishRole = ((await newMember.guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
+				await newMember.roles.set([punishRole]);	//give them the role again!
+				
+				repunish();
+			}
+			
+			repunish();
+			
+			return;
+		}
 		
 		if(!welcomeChannel) return;
 		
@@ -22,7 +43,5 @@ module.exports = {
 		const result = await welcomeChannel.send({ embeds: [embedMessage] });
 		
 		await result.react("👋");
-		
-		require("../handlers/punishHandler").checkPunishments();	//reapply punishment if necessary
 	}
 };
