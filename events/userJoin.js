@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const client = require("../index");
 
 module.exports = {
 	name: "guildMemberAdd",	//user joins the server
@@ -27,7 +28,7 @@ module.exports = {
 			return;
 		}
 		
-		if(!welcomeChannel) return;
+		if(!welcomeChannel || client.debugMode) return;
 		
 		const embedMessage = new MessageEmbed()
 			.setColor("#ff9b00")

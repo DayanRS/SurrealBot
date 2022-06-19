@@ -9,6 +9,7 @@ const client = new Client({
 
 module.exports = client;	//surely there's a nicer way to do this
 
+client.debugMode = false;
 client.getTimeString = () => {
 	const date = new Date();
 	const h = date.getUTCHours();

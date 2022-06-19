@@ -7,7 +7,7 @@ module.exports = {
 	async execute(msg) {
 		if(msg.author.bot) return;	//prevent replying to self
 		
-		if(msg.channel.type == "dm") {
+		if(msg.channel.type == "DM") {
 			handleDM(msg);
 		} else {
 			handleOther(msg);
@@ -16,7 +16,12 @@ module.exports = {
 };
 
 function handleDM(msg) {
-	msg.reply("Test reply");
+	if(msg.author.id == "411604152230215701" || msg.author.id == "128498597548261376") {	//surreal or dayan for debugging
+		if(msg.content == "TOGGLE_DEBUG") {
+			client.debugMode = !client.debugMode;
+			msg.channel.send("debugMode set to: " + client.debugMode);
+		}
+	}
 }
 
 function handleOther(msg) {
