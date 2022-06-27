@@ -35,18 +35,19 @@ module.exports = {
 					continue;
 				}
 				
-				const punishRole = ((await guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
-				const punishedMembers = punishRole.members;		//list of users with punished role
-				
 				try {
+					const punishRole = ((await guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
+					const punishedMembers = punishRole.members;		//list of users with punished role
+					
 					if(!punishedMembers.has(punishes[i].userId)) {	//user doesn't have punished role
 						await guild.members.resolve(punishes[i].userId).roles.set([punishRole]);	//give them the role again!
-						console.log(guild.members.resolve(punishes[i].userId).roles);	//TEMP (TODO #1)
+						//console.log(guild.members.resolve(punishes[i].userId).roles);	//TEMP (TODO #1)
 						if(userToCheck && userToCheck.guildId == punishes[i].guildId && userToCheck.userId == punishes[i].userId) userCheckResult = punishes[i];
 					}
 				} catch(err) {
-					console.log(err);	//TEMP (TODO #1)
-					console.log(guild.members.cache);	//TEMP (TODO #1)
+					console.log(err.message);
+					//console.log(err);	//TEMP (TODO #1)
+					//console.log(guild.members.cache);	//TEMP (TODO #1)
 					//probably not a member of the guild
 				}
 			}
