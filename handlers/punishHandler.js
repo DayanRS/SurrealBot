@@ -18,6 +18,8 @@ module.exports = {
 			
 			if(ignoreList.indexOf(punishes[i].guildId) >= 0) continue;
 			
+			console.log(punishes[i].userId + " (714857399328178268)");	//TEMP (TODO #1)
+			
 			if(timeDiff > punishes[i].duration) {	//punish expired
 				console.log(`Punish time up for id: ${punishes[i].userId}`);
 				module.exports.removePunishment(punishes[i], "Expired");
@@ -39,9 +41,12 @@ module.exports = {
 				try {
 					if(!punishedMembers.has(punishes[i].userId)) {	//user doesn't have punished role
 						await guild.members.resolve(punishes[i].userId).roles.set([punishRole]);	//give them the role again!
+						console.log(guild.members.resolve(punishes[i].userId).roles);	//TEMP (TODO #1)
 						if(userToCheck && userToCheck.guildId == punishes[i].guildId && userToCheck.userId == punishes[i].userId) userCheckResult = punishes[i];
 					}
 				} catch(err) {
+					console.log(err);	//TEMP (TODO #1)
+					console.log(guild.members.cache);	//TEMP (TODO #1)
 					//probably not a member of the guild
 				}
 			}

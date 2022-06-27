@@ -21,6 +21,10 @@ function handleDM(msg) {
 			client.debugMode = !client.debugMode;
 			msg.channel.send("debugMode set to: " + client.debugMode);
 		}
+		
+		if(msg.content == "CHECK_PUNISH") {
+			require("../handlers/punishHandler").checkPunishments();
+		}
 	}
 }
 
