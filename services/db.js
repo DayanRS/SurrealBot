@@ -77,7 +77,11 @@ module.exports = {
 			};
 			
 			let update = {
-				$push: { "warnings": entry.warnings[0] }
+				$push: {
+					"warnings": {
+						$each: entry.warnings
+					}
+				}
 			};
 			
 			let options = {
