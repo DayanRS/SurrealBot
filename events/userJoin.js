@@ -17,8 +17,12 @@ module.exports = {
 			let repunish = async () => {	//reapply punish role to prevent bots (mee6) overriding it
 				if(count++ > 7) return;
 				
-				const punishRole = ((await newMember.guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
-				await newMember.roles.set([punishRole]);	//give them the role again!
+				try {
+					const punishRole = ((await newMember.guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
+					await newMember.roles.set([punishRole]);	//give them the role again!
+				} catch(e) {
+					//issue reapplying punishment
+				}
 				
 				repunish();
 			}
