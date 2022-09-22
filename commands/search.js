@@ -61,6 +61,17 @@ module.exports = {
 			for(let i = 0; i < results.warnings.length; i++) {
 				let infracType = results.warnings[i].type;
 				if(results.warnings[i].status) infracType += ` (${results.warnings[i].status})`;
+
+				switch (infracType) {
+					case "Warning":
+						infracType = "⚠️ " + infracType;
+						break;
+					case "Ban":
+						infracType = "🔨 " + infracType;
+				
+					default: // punishments
+						infracType = "🔇 " + infracType;
+				}
 				
 				searchString += `**${infracType}:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
 			}
