@@ -23,7 +23,7 @@ module.exports = {
 		
 		const searchNotes = [];
 		
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {	//check commandUser permissions
 			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
