@@ -94,7 +94,8 @@ module.exports = {
 					staff: punishObj.staff,
 					type: "Punishment",
 					status: status,
-					roles: punishObj.roles
+					roles: punishObj.roles,
+					refId: punishObj.refId
 				}
 			]
 		});

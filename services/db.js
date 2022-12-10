@@ -135,15 +135,13 @@ module.exports = {
 	 * For manual database maintenance, creating a new field for existing entries - use sparingly!
 	 * @returns null
 	 */
-	async appendField() {
+	async appendField(collectionType) {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
 			
-			const HARDCODED_COLL_TOGGLE = module.exports.WARNINGS;	//manually choose which collection to modify
-			
 			let results;
 			
-			if(HARDCODED_COLL_TOGGLE === module.exports.PUNISHES) {
+			if(collectionType === module.exports.PUNISHES) {
 				let query = {
 					refId: {$exists: false}		//query for field by non-existence (property is the new one to add)
 				};
@@ -159,9 +157,9 @@ module.exports = {
 					upsert: false,	//don't create new value if it doesn't exist
 				};
 				
-				results = await dbCollections[HARDCODED_COLL_TOGGLE].findOneAndUpdate(query, update, options);
+				results = await dbCollections[module.exports.PUNISHES].findOneAndUpdate(query, update, options);
 				
-			} else if(HARDCODED_COLL_TOGGLE === module.exports.WARNINGS) {
+			} else if(collectionType === module.exports.WARNINGS) {
 				query = {
 					warnings: {
 						$elemMatch: {
@@ -183,7 +181,7 @@ module.exports = {
 					//arrayFilters: [{"elem.refId": {$exists: false}}]
 				};
 				
-				results = await dbCollections[HARDCODED_COLL_TOGGLE].findOneAndUpdate(query, update, options);
+				results = await dbCollections[module.exports.WARNINGS].findOneAndUpdate(query, update, options);
 			}
 			
 			return results.value;

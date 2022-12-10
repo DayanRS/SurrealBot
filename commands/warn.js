@@ -62,7 +62,8 @@ module.exports = {
 					time: Date.now(),
 					reason: warnReason,
 					staff: interaction.member.user.id,
-					type: "Warning"
+					type: "Warning",
+					refId : "w_" + Math.floor(Math.random()*1000000000000).toString(36)
 				}
 			]
 		});
