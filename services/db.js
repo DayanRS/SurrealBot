@@ -99,6 +99,39 @@ module.exports = {
 		}
 	},
 	
+	async testUpdate() {
+		try {
+			if(!isConnected) await module.exports.connect();	//connect to db if not already
+			
+			let query = {
+				guildId: "224476458523951104",
+				userId: "714857399328178268"
+			};
+			
+			let update = {
+				$push: {
+					"warnings": {
+						$each: entry.warnings
+					}
+				}
+			};
+			
+			let options = {
+				returnDocument: "after",
+				upsert: false
+			};
+			
+			console.log(dbCollections[1].findOne);
+			
+			const result = await dbCollections[1].findOneAndUpdate(query, update, options);
+			
+			return result.value;
+		} catch(err) {
+			console.error(err);
+			return(null);
+		}
+	},
+	
 	async insert(collection, entry) {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
@@ -128,6 +161,52 @@ module.exports = {
 		} catch(err) {
 			console.error(err);
 			return false;
+		}
+	},
+	
+	/**
+	 * For manual database maintenance, creating a new field for existing entries - use sparingly!
+	 * @returns null
+	 */
+	async appendField() {
+		try {
+			if(!isConnected) await module.exports.connect();	//connect to db if not already
+			
+			const HARDCODED_COLL_TOGGLE = module.exports.WARNINGS;	//manually choose which collection to modify
+			
+			let queries = [];
+			
+			queries[0] = {
+				refId: {$exists: false}		//query for field by non-existence (property is the new one to add)
+			};
+			
+			queries[1] = {
+				warnings: {
+					$elemMatch: {
+						refId: {$exists: false}		//query for field existence within array
+					}
+				}
+			};
+			
+			let update = {
+				$set: {		//field update operator
+					"warnings.$.refId" : "w_" + Math.floor(Math.random()*1000000000000).toString(36),	//only update the first element
+					//"warnings.$[elem].refId" : "w_" + Math.floor(Math.random()*1000000000000).toString(36),	//using arrayFilters updates all elements in the array
+				}
+			};
+			
+			let options = {
+				returnDocument: "after",
+				upsert: false,	//don't create new value if it doesn't exist
+				//arrayFilters: [{"elem.refId": {$exists: false}}]
+			};
+			
+			const punishResults = await dbCollections[HARDCODED_COLL_TOGGLE].findOneAndUpdate(queries[1], update, options);
+			
+			return null;
+		} catch(err) {
+			console.error(err);
+			return(null);
 		}
 	},
 	
