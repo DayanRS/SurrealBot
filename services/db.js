@@ -99,39 +99,6 @@ module.exports = {
 		}
 	},
 	
-	async testUpdate() {
-		try {
-			if(!isConnected) await module.exports.connect();	//connect to db if not already
-			
-			let query = {
-				guildId: "224476458523951104",
-				userId: "714857399328178268"
-			};
-			
-			let update = {
-				$push: {
-					"warnings": {
-						$each: entry.warnings
-					}
-				}
-			};
-			
-			let options = {
-				returnDocument: "after",
-				upsert: false
-			};
-			
-			console.log(dbCollections[1].findOne);
-			
-			const result = await dbCollections[1].findOneAndUpdate(query, update, options);
-			
-			return result.value;
-		} catch(err) {
-			console.error(err);
-			return(null);
-		}
-	},
-	
 	async insert(collection, entry) {
 		try {
 			if(!isConnected) await module.exports.connect();	//connect to db if not already
@@ -174,36 +141,52 @@ module.exports = {
 			
 			const HARDCODED_COLL_TOGGLE = module.exports.WARNINGS;	//manually choose which collection to modify
 			
-			let queries = [];
+			let results;
 			
-			queries[0] = {
-				refId: {$exists: false}		//query for field by non-existence (property is the new one to add)
-			};
-			
-			queries[1] = {
-				warnings: {
-					$elemMatch: {
-						refId: {$exists: false}		//query for field existence within array
+			if(HARDCODED_COLL_TOGGLE === module.exports.PUNISHES) {
+				let query = {
+					refId: {$exists: false}		//query for field by non-existence (property is the new one to add)
+				};
+				
+				let update = {
+					$set: {		//field update operator
+						refId : "p_" + Math.floor(Math.random()*1000000000000).toString(36)
 					}
-				}
-			};
+				};
+				
+				let options = {
+					returnDocument: "after",
+					upsert: false,	//don't create new value if it doesn't exist
+				};
+				
+				results = await dbCollections[HARDCODED_COLL_TOGGLE].findOneAndUpdate(query, update, options);
+				
+			} else if(HARDCODED_COLL_TOGGLE === module.exports.WARNINGS) {
+				query = {
+					warnings: {
+						$elemMatch: {
+							refId: {$exists: false}		//query for field existence within array
+						}
+					}
+				};
+				
+				let update = {
+					$set: {		//field update operator
+						"warnings.$.refId" : "w_" + Math.floor(Math.random()*1000000000000).toString(36),	//only update the first element
+						//"warnings.$[elem].refId" : "w_" + Math.floor(Math.random()*1000000000000).toString(36),	//using arrayFilters updates all elements in the array
+					}
+				};
+				
+				let options = {
+					returnDocument: "after",
+					upsert: false,	//don't create new value if it doesn't exist
+					//arrayFilters: [{"elem.refId": {$exists: false}}]
+				};
+				
+				results = await dbCollections[HARDCODED_COLL_TOGGLE].findOneAndUpdate(query, update, options);
+			}
 			
-			let update = {
-				$set: {		//field update operator
-					"warnings.$.refId" : "w_" + Math.floor(Math.random()*1000000000000).toString(36),	//only update the first element
-					//"warnings.$[elem].refId" : "w_" + Math.floor(Math.random()*1000000000000).toString(36),	//using arrayFilters updates all elements in the array
-				}
-			};
-			
-			let options = {
-				returnDocument: "after",
-				upsert: false,	//don't create new value if it doesn't exist
-				//arrayFilters: [{"elem.refId": {$exists: false}}]
-			};
-			
-			const punishResults = await dbCollections[HARDCODED_COLL_TOGGLE].findOneAndUpdate(queries[1], update, options);
-			
-			return null;
+			return results.value;
 		} catch(err) {
 			console.error(err);
 			return(null);
