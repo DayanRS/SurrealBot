@@ -45,9 +45,6 @@ module.exports = {
 		
 		if(!interaction.guild.members.resolve(userToBan)) {	//check if userToBan is a member of the guild
 			banNotes.push("User not in guild prior to ban");
-		} else if(interaction.guild.members.resolve(userToBan).permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {	//check userToBan permissions
-			await interaction.editReply("That user cannot be banned.");
-			return;
 		}
 		
 		try {
