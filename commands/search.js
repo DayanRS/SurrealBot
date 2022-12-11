@@ -62,13 +62,13 @@ module.exports = {
 				let infracType = results.warnings[i].type;
 				if(results.warnings[i].status) infracType += ` (${results.warnings[i].status})`;
 				
-				searchString += `**${infracType}:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
+				searchString += `⚠️ **${infracType}:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
 			}
 		}
 		
 		if(results.punishments) {
 			for(let i = 0; i < results.punishments.length; i++) {
-				searchString += `**Punishment (Active):** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]\n`;
+				searchString += `🔇 **Punishment (Active):** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]\n`;
 			}
 		}
 		
