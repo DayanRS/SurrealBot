@@ -43,10 +43,6 @@ module.exports = {
 			return;
 		}
 		
-		if(!interaction.guild.members.resolve(userToBan)) {	//check if userToBan is a member of the guild
-			banNotes.push("User not in guild prior to ban");
-		}
-		
 		try {
 			await userToBan.send(`You have been banned from **${interaction.guild.name}**. Reason: ${banReason}. To request a ban appeal, please use this form: https://docs.google.com/forms/d/12ydM6TRD2V6ytrStjeJCPQdRDU8yarj7zVBSRYcxutQ`);
 		} catch(err) {
