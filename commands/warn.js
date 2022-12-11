@@ -30,7 +30,7 @@ module.exports = {
 		
 		const warnNotes = [];
 		
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {	//check commandUser permissions
 			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
@@ -62,7 +62,8 @@ module.exports = {
 					time: Date.now(),
 					reason: warnReason,
 					staff: interaction.member.user.id,
-					type: "Warning"
+					type: "Warning",
+					refId : "w_" + Math.floor(Math.random()*1000000000000).toString(36)
 				}
 			]
 		});

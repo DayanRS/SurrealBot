@@ -131,6 +131,66 @@ module.exports = {
 		}
 	},
 	
+	/**
+	 * For manual database maintenance, creating a new field for existing entries - use sparingly!
+	 * @returns null
+	 */
+	async appendField(collectionType) {
+		try {
+			if(!isConnected) await module.exports.connect();	//connect to db if not already
+			
+			let results;
+			
+			if(collectionType === module.exports.PUNISHES) {
+				let query = {
+					refId: {$exists: false}		//query for field by non-existence (property is the new one to add)
+				};
+				
+				let update = {
+					$set: {		//field update operator
+						refId : "p_" + Math.floor(Math.random()*1000000000000).toString(36)
+					}
+				};
+				
+				let options = {
+					returnDocument: "after",
+					upsert: false,	//don't create new value if it doesn't exist
+				};
+				
+				results = await dbCollections[module.exports.PUNISHES].findOneAndUpdate(query, update, options);
+				
+			} else if(collectionType === module.exports.WARNINGS) {
+				query = {
+					warnings: {
+						$elemMatch: {
+							refId: {$exists: false}		//query for field existence within array
+						}
+					}
+				};
+				
+				let update = {
+					$set: {		//field update operator
+						"warnings.$.refId" : "w_" + Math.floor(Math.random()*1000000000000).toString(36),	//only update the first element
+						//"warnings.$[elem].refId" : "w_" + Math.floor(Math.random()*1000000000000).toString(36),	//using arrayFilters updates all elements in the array
+					}
+				};
+				
+				let options = {
+					returnDocument: "after",
+					upsert: false,	//don't create new value if it doesn't exist
+					//arrayFilters: [{"elem.refId": {$exists: false}}]
+				};
+				
+				results = await dbCollections[module.exports.WARNINGS].findOneAndUpdate(query, update, options);
+			}
+			
+			return results.value;
+		} catch(err) {
+			console.error(err);
+			return(null);
+		}
+	},
+	
 	//specifically for warn/punish history lookup - probably should be generalised
 	async testSearch(query) {
 		try {

@@ -141,7 +141,8 @@ module.exports = {
 			staff: interaction.member.user.id,
 			time: Date.now(),
 			duration: splitTime[0],
-			roles: roles
+			roles: roles,
+			refId : "p_" + Math.floor(Math.random()*1000000000000).toString(36)
 		});
 		
 		let punishString = `
