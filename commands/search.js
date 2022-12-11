@@ -10,6 +10,12 @@ module.exports = {
 				type: Constants.ApplicationCommandOptionTypes.USER,
 				description: "The user for which to check punishments",
 				required: true
+			},
+			{
+					name: "showids",
+					type: Constants.ApplicationCommandOptionTypes.BOOLEAN,
+					description: "Show infraction IDs",
+					required: false
 			}
 		]
 	},
@@ -21,6 +27,7 @@ module.exports = {
 		const userToSearch = interaction.options.getUser("user", true);
 		const commandUser = interaction.member.user;
 		
+		const showIds = interaction.options.getBoolean("showids", false);
 		const searchNotes = [];
 		
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
@@ -62,13 +69,34 @@ module.exports = {
 				let infracType = results.warnings[i].type;
 				if(results.warnings[i].status) infracType += ` (${results.warnings[i].status})`;
 				
-				searchString += `**${infracType}:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]\n`;
+				switch(infracType) {
+					case "Warning":
+						infracType = "⚠️ " + infracType;
+						break;
+						
+					case "Ban":
+						infracType = "🔨 " + infracType;
+						break;
+						
+					default: // punishments
+						infracType = "🔇 " + infracType;
+				}
+				
+				searchString += `**${infracType}:** ${results.warnings[i].reason} [${formatTimestamp(results.warnings[i].time)}]`;
+				
+				if(showIds) searchString += `  (ID: **${results.warnings[i].refId}**)`;
+				
+				searchString += "\n";
 			}
 		}
 		
 		if(results.punishments) {
 			for(let i = 0; i < results.punishments.length; i++) {
-				searchString += `**Punishment (Active):** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]\n`;
+				searchString += `**Punishment (Active):** ${results.punishments[i].reason} [${formatTimestamp(results.punishments[i].time)}]`;
+				
+				if(showIds) searchString += `  (ID: **${results.punishments[i].refId}**)`;
+				
+				searchString += "\n";
 			}
 		}
 		
