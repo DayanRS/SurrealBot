@@ -43,10 +43,15 @@ module.exports = {
 			return;
 		}
 		
-		try {
-			await userToBan.send(`You have been banned from **${interaction.guild.name}**. Reason: ${banReason}. To request a ban appeal, please use this form: https://docs.google.com/forms/d/12ydM6TRD2V6ytrStjeJCPQdRDU8yarj7zVBSRYcxutQ`);
-		} catch(err) {
-			banNotes.push(err.message);
-		}
+		await userToBan.send(`You have been banned from **${interaction.guild.name}**. Reason: ${banReason}. To request a ban appeal, please use this form: https://docs.google.com/forms/d/12ydM6TRD2V6ytrStjeJCPQdRDU8yarj7zVBSRYcxutQ`);
+		let banString = `
+			**Banned user:** <@${userToBan.id}> (${userToBan.id})
+			**Reason:** ${banReason}
+			**Duration:** Permanent
+			**Staff member:** ${commandUser.username}
+			`.replaceAll("\t","");
+
+			await interaction.editReply(banString);
+
 	}
 };
