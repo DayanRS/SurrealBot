@@ -6,7 +6,7 @@ module.exports = {
 		description: "Do an event ping.",
 		options: [
 			{
-				name: "eventDescription",
+				name: "eventdescription",
 				type: Constants.ApplicationCommandOptionTypes.STRING,
 				description: "Short description of the event being hosted.",
 			}
