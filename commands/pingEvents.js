@@ -2,11 +2,11 @@ const { Constants } = require("discord.js");
 
 module.exports = {
 	data: {
-		name: "eventping",
+		name: "pingEvents",
 		description: "Do an event ping.",
 		options: [
 			{
-				name: "pingEvents",
+				name: "eventDescription",
 				type: Constants.ApplicationCommandOptionTypes.STRING,
 				description: "Short description of the event being hosted.",
 			}
