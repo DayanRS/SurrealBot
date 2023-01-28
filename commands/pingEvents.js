@@ -1,4 +1,4 @@
-const { Constants, Permissions } = require("discord.js");
+const { Constants } = require("discord.js");
 
 module.exports = {
 	data: {
