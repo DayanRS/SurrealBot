@@ -6,9 +6,10 @@ module.exports = {
 		description: "Do an event ping.",
 		options: [
 			{
-				name: "eventdescription",
+				name: "description",
 				type: Constants.ApplicationCommandOptionTypes.STRING,
 				description: "Short description of the event being hosted.",
+				required: true
 			}
 		]
 	},
@@ -19,7 +20,7 @@ module.exports = {
 		
 		const commandUser = interaction.member;
 		
-		let eventDesc = interaction.options.getString("eventDescription");
+		let eventDesc = interaction.options.getString("description");
 		const eventHostRole = ((await interaction.guild.roles.fetch()).filter((role) => role.name === "Event Host")).at(0);
 		const eventsPingRole = ((await interaction.guild.roles.fetch()).filter((role) => role.name === "Events Ping")).at(0);
 		
@@ -40,7 +41,7 @@ module.exports = {
 		}
 		
 		await interaction.editReply({
-			content: `<@${eventDesc} <@${eventsPingRole.id}>`
+			content: `${eventDesc} <@&${eventsPingRole.id}>`
 		});
 	}
 };
