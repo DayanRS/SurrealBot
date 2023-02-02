@@ -4,7 +4,7 @@ const settings = require("../client-settings.js");
 module.exports = {
 	data: {
 		name: "raidmode",
-		description: "Temporarily punish user",
+		description: "Disables join messages during a raid",
 		options: [
 			{
 				name: "raidstatus",

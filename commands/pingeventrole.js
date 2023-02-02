@@ -3,7 +3,7 @@ const { Constants, Permissions } = require("discord.js");
 module.exports = {
 	data: {
 		name: "pingeventrole",
-		description: "Do an event ping.",
+		description: "Do an event ping",
 		options: [
 			{
 				name: "description",
