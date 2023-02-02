@@ -1,4 +1,4 @@
-const { Constants } = require("discord.js");
+const { Constants, Permissions } = require("discord.js");
 
 module.exports = {
 	data: {
@@ -16,8 +16,8 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply();
 		interaction.isDeferred = true;
-
-		const commandUser = interaction.member.user;
+		
+		const commandUser = interaction.member;
 		
 		let eventDesc = interaction.options.getString("eventDescription");
 		const eventHostRole = ((await interaction.guild.roles.fetch()).filter((role) => role.name === "Event Host")).at(0);
@@ -27,18 +27,20 @@ module.exports = {
 			await interaction.editReply(`"Events Ping" role does not exist in this server.`);
 			return;
 		}
-
-		if(!commandUser.roles.cache.some(role => role.id === eventHostRole.id)) {	//check commandUser permissions
+		
+		let isStaff = interaction.memberPermissions.has(Permissions.FLAGS.MANAGE_MESSAGES);	//check commandUser permissions
+		let hasEventRole = !!eventHostRole ? commandUser.roles.cache.some(role => role.id === eventHostRole.id) : false;	//if role exists, check if user has it
+		
+		if(!isStaff && !hasEventRole) {
 			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
 			return;
 		}
-
+		
 		await interaction.editReply({
 			content: `<@${eventDesc} <@${eventsPingRole.id}>`
 		});
-		
 	}
 };
