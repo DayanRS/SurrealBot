@@ -1,5 +1,4 @@
 const { MessageEmbed } = require("discord.js");
-const client = require("../index");
 const settings = require("../client-settings.js");
 
 module.exports = {
@@ -33,7 +32,7 @@ module.exports = {
 			return;
 		}
 		
-		if(!welcomeChannel || client.debugMode || settings.raidMode) return;
+		if(!welcomeChannel || settings.debugMode || settings.raidMode) return;
 		
 		const embedMessage = new MessageEmbed()
 			.setColor("#ff9b00")

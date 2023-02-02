@@ -1,5 +1,6 @@
 require("dotenv").config();
 const client = require("../index");
+const settings = require("../client-settings.js");
 
 module.exports = {
 	name: "messageCreate",			//event name
@@ -18,8 +19,8 @@ module.exports = {
 function handleDM(msg) {
 	if(msg.author.id == "411604152230215701" || msg.author.id == "128498597548261376") {	//surreal or dayan for debugging
 		if(msg.content == "TOGGLE_DEBUG") {
-			client.debugMode = !client.debugMode;
-			msg.channel.send("debugMode set to: " + client.debugMode);
+			settings.debugMode = !settings.debugMode;
+			msg.channel.send("debugMode set to: " + settings.debugMode);
 		}
 		
 		if(msg.content == "CHECK_PUNISH") {
