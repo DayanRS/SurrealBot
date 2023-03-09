@@ -4,7 +4,7 @@ module.exports = {
 	data: {
 		name: "ghostwrite",
 		description: "Become an impostor sus",
-		defaultMemberPermissions: PermissionFlagsBits.KICK_MEMBERS,
+		defaultMemberPermissions: PermissionFlagsBits.KickMembers,
 		options: [
 			{
 				name: "channel",
