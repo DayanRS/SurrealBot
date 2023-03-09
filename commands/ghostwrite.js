@@ -11,11 +11,13 @@ module.exports = {
 				name: "channel",
 				type: Constants.ApplicationCommandOptionTypes.CHANNEL,
 				description: "The channel in which to send the message",
+				required: true
 			},
 			{
 				name: "message",
 				type: Constants.ApplicationCommandOptionTypes.STRING,
 				description: "The message to send",
+				required: true
 			}
 		]
 	},
@@ -25,7 +27,7 @@ module.exports = {
 		interaction.isDeferred = true;
 		
 		const channel = interaction.options.getChannel("channel");
-		const message = interaction.options.getChannel("message");
+		const message = interaction.options.getString("message");
 		const commandUser = interaction.member;	//as GuildMember
 
 		message = message.replace(/(@everyone|@here)/gmi, "")
