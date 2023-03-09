@@ -1,7 +1,7 @@
 const { Constants, Permissions } = require("discord.js");
 module.exports = {
 	data: {
-		name: "ghostwriter",
+		name: "ghostwrite",
 		description: "Become an impostor sus",
 		options: [
 			{
