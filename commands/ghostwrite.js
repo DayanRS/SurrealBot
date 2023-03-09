@@ -27,8 +27,7 @@ module.exports = {
 		interaction.isDeferred = true;
 		
 		const channel = interaction.options.getChannel("channel");
-		const message = interaction.options.getString("message");
-		const commandUser = interaction.member;	//as GuildMember
+		let message = interaction.options.getString("message");
 
 		message = message.replace(/(@everyone|@here)/gmi, "")
 
