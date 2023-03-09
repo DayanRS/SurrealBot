@@ -3,7 +3,7 @@ const { PermissionFlagsBits } = require('discord-api-types/v10');
 
 module.exports = {
 	data: {
-		name: "ghostwrite",
+		name: "ghostwriter",
 		description: "Become an impostor sus",
 		options: [
 			{
@@ -28,7 +28,7 @@ module.exports = {
 		const channel = interaction.options.getChannel("channel");
 		let message = interaction.options.getString("message");
 
-		if(!interaction.memberPermissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {	//check commandUser permissions
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
 			await interaction.editReply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
