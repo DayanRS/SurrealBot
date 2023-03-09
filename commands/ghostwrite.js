@@ -36,6 +36,10 @@ module.exports = {
 
 		message = message.replace(/(@everyone|@here)/gmi, "")
 
-		await channel.send({ content: message });
+		const impostorMsg = await channel.send({ content: message });
+
+		await interaction.editReply({
+			content: `Impostor activities finished with success. Message link: ${impostorMsg.url}`
+		});
 	}
 };
