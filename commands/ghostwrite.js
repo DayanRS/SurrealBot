@@ -30,6 +30,6 @@ module.exports = {
 
 		message = message.replace(/(@everyone|@here)/gmi, "")
 
-		await welcomeChannel.send({ content: message });
+		await channel.send({ content: message });
 	}
 };
