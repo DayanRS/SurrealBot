@@ -1,4 +1,5 @@
-const { Constants, PermissionFlagsBits } = require("discord.js");
+const { Constants } = require("discord.js");
+const { PermissionFlagsBits } = require('discord-api-types/v10');
 
 module.exports = {
 	data: {
