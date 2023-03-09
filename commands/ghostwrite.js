@@ -5,7 +5,6 @@ module.exports = {
 	data: {
 		name: "ghostwrite",
 		description: "Become an impostor sus",
-		defaultMemberPermissions: Number(PermissionFlagsBits.KickMembers),
 		options: [
 			{
 				name: "channel",
@@ -28,6 +27,14 @@ module.exports = {
 		
 		const channel = interaction.options.getChannel("channel");
 		let message = interaction.options.getString("message");
+
+		if(!interaction.memberPermissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {	//check commandUser permissions
+			await interaction.editReply({
+				content: "You have insufficient permissions for this command.",
+				ephemeral: true
+			});
+			return;
+		}
 
 		message = message.replace(/(@everyone|@here)/gmi, "")
 
