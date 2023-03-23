@@ -26,8 +26,8 @@ module.exports = {
 		// const channel = interaction.options.getChannel("channel");
 		let message = interaction.options.getString("message");
 
-		const generalChannelID = 411605881336365068;
-		const channel = await interaction.guild.channels.fetch(generalChannelID);
+		const channelName = 'general';
+		const channel = interaction.guild.channels.cache.find(c => c.name === channelName);		
 
 		if(!interaction.memberPermissions.has(Permissions.FLAGS.MODERATE_MEMBERS)) {	//check commandUser permissions
 			await interaction.editReply({
