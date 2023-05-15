@@ -42,8 +42,7 @@ module.exports = {
 		const impostorMsg = await channel.send({ content: message });
 
 		await interaction.editReply({
-			content: `Impostor activities finished with success. Message link: ${impostorMsg.url}`,
-			ephemeral: true
+			content: `Impostor activities finished with success. Message link: ${impostorMsg.url}`
 		});
 	}
 };
