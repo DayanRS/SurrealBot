@@ -124,7 +124,7 @@ module.exports = {
 		
 
 		let punishedRoles = [punishRole];
-		if (guildMemberToCringe.roles.cache.some(role => role.id === boosterRole.id)) punishedRoles.push(boosterRole);
+		if (userToPunish.roles.cache.some(role => role.id === boosterRole.id)) punishedRoles.push(boosterRole);
 
 		//apply punishment
 		await interaction.guild.members.resolve(userToPunish).roles.set(punishedRoles);
