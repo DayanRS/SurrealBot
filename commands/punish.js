@@ -127,7 +127,7 @@ module.exports = {
 		if (boosterRole) punishedRoles.push(boosterRole);
 
 		//apply punishment
-		await interaction.guild.members.resolve(userToPunish).roles.set([punishRole, boosterRole]);
+		await interaction.guild.members.resolve(userToPunish).roles.set(punishedRoles);
 		
 		//Process:
 		//-check permissions
