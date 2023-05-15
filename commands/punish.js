@@ -36,6 +36,7 @@ module.exports = {
 		const commandUser = interaction.member.user;
 		
 		const punishRole = ((await interaction.guild.roles.fetch()).filter((role) => role.name === "Punished")).at(0);
+		const boosterRole = ((await interaction.guild.roles.fetch()).filter((role) => role.name === "Nitro Booster")).at(0);
 		
 		const punishNotes = [];
 		
@@ -121,8 +122,12 @@ module.exports = {
 		
 		let roles = interaction.guild.members.resolve(userToPunish).roles.cache.filter(role => role.name != "@everyone").map(role => role.id);	//array of role ids
 		
+
+		let punishedRoles = [punishRole];
+		if (boosterRole) punishedRoles.push(boosterRole);
+
 		//apply punishment
-		await interaction.guild.members.resolve(userToPunish).roles.set([punishRole]);
+		await interaction.guild.members.resolve(userToPunish).roles.set([punishRole, boosterRole]);
 		
 		//Process:
 		//-check permissions
