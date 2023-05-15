@@ -124,8 +124,9 @@ module.exports = {
 		
 
 		let punishedRoles = [punishRole];
+		let punishTarget = await interaction.guild.members.fetch(userToPunish);
 		// check if user has the booster role
-		if (await interaction.guild.members.fetch(userToPunish).roles.cache.some(role => role.id === boosterRole.id)) {
+		if (punishTarget.roles.cache.some(role => role.id === boosterRole.id)) {
 			punishedRoles.push(boosterRole);
 		}
 
