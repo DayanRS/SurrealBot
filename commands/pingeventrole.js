@@ -15,7 +15,7 @@ module.exports = {
 	},
 	
 	async execute(interaction) {
-		await interaction.deferReply();
+		// await interaction.deferReply();
 		interaction.isDeferred = true;
 		
 		const commandUser = interaction.member;
