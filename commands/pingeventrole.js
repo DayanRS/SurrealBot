@@ -33,14 +33,14 @@ module.exports = {
 		let hasEventRole = !!eventHostRole ? commandUser.roles.cache.some(role => role.id === eventHostRole.id) : false;	//if role exists, check if user has it
 		
 		if(!isStaff && !hasEventRole) {
-			await interaction.editReply({
+			await interaction.reply({
 				content: "You have insufficient permissions for this command.",
 				ephemeral: true
 			});
 			return;
 		}
 		
-		await interaction.editReply({
+		await interaction.reply({
 			content: `${eventDesc} <@&${eventsPingRole.id}>`
 		});
 	}
